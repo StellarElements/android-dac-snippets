@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:OptIn(kotlinx.parcelize.Experimental::class)
-
 package com.example.android.basics
 
 import android.os.Parcel
@@ -177,6 +175,7 @@ private object DataClassSnippet {
     // [START android_kotlin_parcelize_data_class]
     data class C(val a: Int, val b: String)
 
+    @OptIn(kotlinx.parcelize.Experimental::class)
     @Parcelize
     class P(val c: @DataClass C) : Parcelable
     // [END android_kotlin_parcelize_data_class]
