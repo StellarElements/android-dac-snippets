@@ -21,11 +21,18 @@ import android.os.Parcelable
 import kotlinx.parcelize.DataClass
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parceler
+
+// [START android_kotlin_parcelize_basic]
 import kotlinx.parcelize.Parcelize
+// [END android_kotlin_parcelize_basic]
+
 import kotlinx.parcelize.RawValue
 import kotlinx.parcelize.TypeParceler
 import kotlinx.parcelize.WriteWith
+
+// [START android_kotlin_parcelize_parcelable_creator]
 import kotlinx.parcelize.parcelableCreator
+// [END android_kotlin_parcelize_parcelable_creator]
 
 private object BasicSnippet {
     // [START android_kotlin_parcelize_basic]
