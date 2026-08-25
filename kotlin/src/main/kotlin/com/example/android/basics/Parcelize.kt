@@ -21,21 +21,16 @@ import android.os.Parcelable
 import kotlinx.parcelize.DataClass
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parceler
-
-// [START android_kotlin_parcelize_basic]
 import kotlinx.parcelize.Parcelize
-// [END android_kotlin_parcelize_basic]
-
 import kotlinx.parcelize.RawValue
 import kotlinx.parcelize.TypeParceler
 import kotlinx.parcelize.WriteWith
-
-// [START android_kotlin_parcelize_parcelable_creator]
 import kotlinx.parcelize.parcelableCreator
-// [END android_kotlin_parcelize_parcelable_creator]
 
 private object BasicSnippet {
     // [START android_kotlin_parcelize_basic]
+    // import kotlinx.parcelize.Parcelize
+
     @Parcelize
     class User(val firstName: String, val lastName: String, val age: Int) : Parcelable
     // [END android_kotlin_parcelize_basic]
@@ -135,6 +130,8 @@ private object ParcelableCreatorSnippet {
     class User(val firstName: String, val lastName: String, val age: Int) : Parcelable
 
     // [START android_kotlin_parcelize_parcelable_creator]
+    // import kotlinx.parcelize.parcelableCreator
+
     fun userFromParcel(parcel: Parcel): User {
         return parcelableCreator<User>().createFromParcel(parcel)
     }
@@ -178,16 +175,6 @@ private object SealedClassSnippet {
     // [END android_kotlin_parcelize_sealed_class]
 }
 
-private object DataClassSnippet {
-    // [START android_kotlin_parcelize_data_class]
-    data class C(val a: Int, val b: String)
-
-    @OptIn(kotlinx.parcelize.Experimental::class)
-    @Parcelize
-    class P(val c: @DataClass C) : Parcelable
-    // [END android_kotlin_parcelize_data_class]
-}
-
 private object DataWrapperSnippet {
     // [START android_kotlin_parcelize_data_class_wrapper]
     // Common code:
@@ -215,15 +202,4 @@ private object InheritanceBaseSnippet {
         override val s: String
     ) : Base(s)
     // [END android_kotlin_parcelize_inheritance_base]
-}
-
-private object InheritanceExperimentalSnippet {
-    // [START android_kotlin_parcelize_inheritance_experimental]
-    // experimental code generation enabled
-    @Parcelize
-    open class Base(val s: String) : Parcelable
-
-    @Parcelize
-    class Derived(val x: Int, s: String) : Base(s)
-    // [END android_kotlin_parcelize_inheritance_experimental]
 }
