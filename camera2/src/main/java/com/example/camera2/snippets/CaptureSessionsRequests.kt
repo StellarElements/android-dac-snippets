@@ -46,13 +46,7 @@ private class CaptureSessionSetupActivity(
         // 2. ImageReader, if you want to read each frame or perform frame-by-frame
         // analysis
         // 3. OpenGL Texture or TextureView, although discouraged for maintainability
-        // [START_EXCLUDE silent]
-        /*
-        // [END_EXCLUDE]
-              reasons
-        // [START_EXCLUDE silent]
-         */
-        // [END_EXCLUDE]
+        // reasons
         // 4. RenderScript.Allocation, if you want to do parallel processing
         val surfaceView = findViewById<SurfaceView>(
             // [START_EXCLUDE silent]

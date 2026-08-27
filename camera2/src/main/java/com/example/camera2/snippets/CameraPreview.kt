@@ -27,7 +27,6 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import kotlin.math.min
 
-// [START_EXCLUDE silent]
 interface CameraViewfinder {
     fun requestSurfaceAsync(request: ViewfinderSurfaceRequest): ListenableFuture<Surface>
 }
@@ -36,7 +35,6 @@ class ViewfinderSurfaceRequest(
     val resolution: Size,
     val characteristics: CameraCharacteristics
 )
-// [END_EXCLUDE]
 
 private class CameraPreviewHelper(
     private val width: Int,
