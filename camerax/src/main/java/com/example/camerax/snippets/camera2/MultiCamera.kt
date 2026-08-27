@@ -197,7 +197,7 @@ private object MultiCameraSnippets {
         surface2: Surface
     ) {
         // [START android_camera2_multi_camera_zoom_example]
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
         val cameraManager: CameraManager = ...
@@ -205,7 +205,7 @@ private object MultiCameraSnippets {
         // Get the two output targets from the activity / fragment
         val surface1 = ...  // from SurfaceView
         val surface2 = ...  // from SurfaceView
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
 
@@ -236,11 +236,11 @@ private object MultiCameraSnippets {
         captureCallback: CameraCaptureSession.CaptureCallback? = null
     ) {
         // [START android_camera2_multi_camera_distortion_correction]
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
         val cameraSession: CameraCaptureSession = ...
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
 
@@ -250,11 +250,11 @@ private object MultiCameraSnippets {
         )
 
         // Determine if this device supports distortion correction
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
         val characteristics: CameraCharacteristics = ...
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
         val supportsDistortionCorrection = characteristics.get(
@@ -273,7 +273,7 @@ private object MultiCameraSnippets {
         // Add output target, set other capture request parameters...
 
         // Dispatch the capture request
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         cameraSession.capture(captureRequest.build(), captureCallback, null)
         /*
         // [END_EXCLUDE]

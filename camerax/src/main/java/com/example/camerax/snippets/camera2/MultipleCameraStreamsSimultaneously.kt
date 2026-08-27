@@ -42,11 +42,11 @@ private object MultipleCameraStreamsSnippets {
         imReaderSurface: Surface
     ) {
         // [START android_camera2_multiple_camera_streams_combined_request]
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
         val session: CameraCaptureSession = ...  // from CameraCaptureSession.StateCallback
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
 
@@ -69,11 +69,11 @@ private object MultipleCameraStreamsSnippets {
 
     fun supportedFormats(characteristics: CameraCharacteristics) {
         // [START android_camera2_multiple_camera_streams_supported_formats]
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
         val characteristics: CameraCharacteristics = ...
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
         val supportedFormats = characteristics.get(
@@ -84,12 +84,12 @@ private object MultipleCameraStreamsSnippets {
 
     fun outputSizesByFormat(characteristics: CameraCharacteristics, outputFormat: Int) {
         // [START android_camera2_multiple_camera_streams_output_sizes_format]
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
         val characteristics: CameraCharacteristics = ...
         val outputFormat: Int = ...  // such as ImageFormat.JPEG
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
         val sizes = characteristics.get(
@@ -100,12 +100,12 @@ private object MultipleCameraStreamsSnippets {
 
     fun <T> outputSizesByClass(characteristics: CameraCharacteristics, targetClass: Class<T>) {
         // [START android_camera2_multiple_camera_streams_output_sizes_class]
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
         val characteristics: CameraCharacteristics = ...
         val targetClass: Class <T> = ...  // such as SurfaceView::class.java
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
         val sizes = characteristics.get(
@@ -200,11 +200,11 @@ private object MultipleCameraStreamsSnippets {
 
     fun checkHardwareLevel(characteristics: CameraCharacteristics) {
         // [START android_camera2_multiple_camera_streams_hardware_level]
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
         val characteristics: CameraCharacteristics = ...
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
 
@@ -238,11 +238,11 @@ private class MultipleStreamsActivity : Activity() {
 
     fun setupPreviewSizes(characteristics: CameraCharacteristics) {
         // [START android_camera2_multiple_camera_streams_get_preview_output_sizes]
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
         val characteristics: CameraCharacteristics = ...
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
         val context = this as Context // assuming you are inside of an activity
@@ -261,12 +261,12 @@ private class MultipleStreamsActivity : Activity() {
 
     private fun setupSurfaceView(surfaceViewSize: Size) {
         // [START android_camera2_multiple_camera_streams_surfaceview_callback]
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         val surfaceView = SurfaceView(this)
         /*
         // [END_EXCLUDE]
         val surfaceView = findViewById <SurfaceView>(...)
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
         surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
@@ -274,13 +274,13 @@ private class MultipleStreamsActivity : Activity() {
                 // You do not need to specify image format, and it will be considered of type PRIV
                 // Surface is now ready and you could use it as an output target for CameraSession
             }
-            // [START_EXCLUDE]
+            // [START_EXCLUDE silent]
             override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
             override fun surfaceDestroyed(holder: SurfaceHolder) {}
           /*
           // [END_EXCLUDE]
           ...
-          // [START_EXCLUDE]
+          // [START_EXCLUDE silent]
            */
             // [END_EXCLUDE]
         })

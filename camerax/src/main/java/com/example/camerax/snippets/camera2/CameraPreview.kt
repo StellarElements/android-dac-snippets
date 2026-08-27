@@ -27,7 +27,7 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import kotlin.math.min
 
-// [START_EXCLUDE]
+// [START_EXCLUDE silent]
 interface CameraViewfinder {
     fun requestSurfaceAsync(request: ViewfinderSurfaceRequest): ListenableFuture<Surface>
 }
