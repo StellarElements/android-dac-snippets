@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -28,11 +27,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.camerax.snippets"
+    namespace = "com.example.camera2.snippets"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.example.camerax.snippets"
+        applicationId = "com.example.camera2.snippets"
         minSdk = 23
         targetSdk = 37
         versionCode = 1
@@ -54,44 +53,19 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-
-    // CameraX dependencies
-    implementation(libs.androidx.camera.core)
+    implementation(libs.google.android.material)
+    implementation(libs.guava)
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.guava)
-    implementation(libs.androidx.camera.view)
-    implementation(libs.androidx.camera.compose)
-    implementation(libs.androidx.camera.viewfinder.compose)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.concurrent.futures.ktx)
-    implementation(libs.androidx.camera.extensions)
-    implementation(libs.androidx.camera.video)
-    implementation(libs.androidx.camera.effects)
-    implementation(libs.androidx.media3.effect)
-    implementation(libs.mlkit.face.detection)
-    implementation(libs.androidx.window)
-    implementation(libs.play.services.wearable)
-    implementation(libs.mockito.kotlin)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

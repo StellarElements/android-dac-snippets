@@ -41,6 +41,7 @@ include(
     ":compose:snippets",
     ":datastore",
     ":camerax",
+    ":camera2",
     ":watchface",
     ":wear",
     ":wearcompanion",

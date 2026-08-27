@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.camerax.snippets.camera2
+package com.example.camera2.snippets
 
 import android.Manifest
 import android.hardware.camera2.CameraCaptureSession
@@ -278,7 +278,7 @@ private object MultiCameraSnippets {
         /*
         // [END_EXCLUDE]
         cameraSession.capture(captureRequest.build(), ...)
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
         // [END android_camera2_multi_camera_distortion_correction]
