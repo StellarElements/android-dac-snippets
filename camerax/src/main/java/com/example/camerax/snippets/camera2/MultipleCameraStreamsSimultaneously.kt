@@ -30,6 +30,7 @@ import android.view.Display
 import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.WindowManager
 import kotlin.math.max
 import kotlin.math.min
 
@@ -77,7 +78,7 @@ private object MultipleCameraStreamsSnippets {
         // [END_EXCLUDE]
         val supportedFormats = characteristics.get(
             CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-        )?.outputFormats
+        )!!.outputFormats
         // [END android_camera2_multiple_camera_streams_supported_formats]
     }
 
@@ -93,7 +94,7 @@ private object MultipleCameraStreamsSnippets {
         // [END_EXCLUDE]
         val sizes = characteristics.get(
             CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-        )?.getOutputSizes(outputFormat)
+        )!!.getOutputSizes(outputFormat)
         // [END android_camera2_multiple_camera_streams_output_sizes_format]
     }
 
@@ -109,7 +110,7 @@ private object MultipleCameraStreamsSnippets {
         // [END_EXCLUDE]
         val sizes = characteristics.get(
             CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-        )?.getOutputSizes(targetClass)
+        )!!.getOutputSizes(targetClass)
         // [END android_camera2_multiple_camera_streams_output_sizes_class]
     }
 
@@ -121,12 +122,12 @@ private object MultipleCameraStreamsSnippets {
     ): Size {
         val config = characteristics.get(
             CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
-        )
+        )!!
 
         // If image format is provided, use it to determine supported sizes; or else use target class
         val allSizes = if (format == null)
-            config?.getOutputSizes(targetClass) else config?.getOutputSizes(format)
-        return allSizes?.maxByOrNull { it.height * it.width } ?: Size(0, 0)
+            config.getOutputSizes(targetClass) else config.getOutputSizes(format)
+        return allSizes.maxBy { it.height * it.width }
     }
     // [END android_camera2_multiple_camera_streams_maximum_output_size]
 
@@ -191,7 +192,11 @@ private object MultipleCameraStreamsSnippets {
         characteristics: CameraCharacteristics,
         targetClass: Class<T>,
         format: Int? = null
-    ): Size = getPreviewOutputSize(context.display ?: (context.getSystemService(Context.WINDOW_SERVICE) as android.view.WindowManager).defaultDisplay, characteristics, targetClass, format)
+    ): Size {
+        val display =
+            (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+        return getPreviewOutputSize(display, characteristics, targetClass, format)
+    }
 
     fun checkHardwareLevel(characteristics: CameraCharacteristics) {
         // [START android_camera2_multiple_camera_streams_hardware_level]
@@ -218,6 +223,19 @@ private object MultipleCameraStreamsSnippets {
 
 private class MultipleStreamsActivity : Activity() {
 
+    private fun <T> getPreviewOutputSize(
+        context: Context,
+        characteristics: CameraCharacteristics,
+        targetClass: Class<T>,
+        format: Int? = null
+    ): Size =
+        MultipleCameraStreamsSnippets.getPreviewOutputSize(
+            context,
+            characteristics,
+            targetClass,
+            format
+        )
+
     fun setupPreviewSizes(characteristics: CameraCharacteristics) {
         // [START android_camera2_multiple_camera_streams_get_preview_output_sizes]
         // [START_EXCLUDE]
@@ -229,10 +247,10 @@ private class MultipleStreamsActivity : Activity() {
         // [END_EXCLUDE]
         val context = this as Context // assuming you are inside of an activity
 
-        val surfaceViewSize = MultipleCameraStreamsSnippets.getPreviewOutputSize(
+        val surfaceViewSize = getPreviewOutputSize(
             context, characteristics, SurfaceView::class.java
         )
-        val imageReaderSize = MultipleCameraStreamsSnippets.getPreviewOutputSize(
+        val imageReaderSize = getPreviewOutputSize(
             context, characteristics, ImageReader::class.java, format = ImageFormat.YUV_420_888
         )
         // [END android_camera2_multiple_camera_streams_get_preview_output_sizes]

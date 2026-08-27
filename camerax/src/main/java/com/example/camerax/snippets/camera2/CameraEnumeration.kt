@@ -16,35 +16,37 @@
 
 package com.example.camerax.snippets.camera2
 
-import android.app.Activity
-import android.content.Context
+import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CameraMetadata
+import android.util.Log
+
+private const val TAG = "CameraEnumeration"
 
 private object CameraEnumerationSnippets {
 
-    fun iterateCameras(activity: Activity) {
+    fun iterateCameras(cameraManager: CameraManager) {
         // [START android_camera2_camera_enumeration_iterate_cameras]
-        val cameraManager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        val cameraIdList = cameraManager.cameraIdList
-        for (cameraId in cameraIdList) {
-            val characteristics = cameraManager.getCameraCharacteristics(cameraId)
-            val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
-            if (cameraDirection != null &&
-                cameraDirection == CameraCharacteristics.LENS_FACING_BACK
-            ) {
-                continue
+        try {
+            val cameraIdList = cameraManager.cameraIdList // may be empty
+
+            // iterate over available camera devices
+            for (cameraId in cameraIdList) {
+                val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+                val cameraLensFacing = characteristics.get(CameraCharacteristics.LENS_FACING)
+                val cameraCapabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
+
+                // check if the selected camera device supports basic features
+                // ensures backward compatibility with the original Camera API
+                val isBackwardCompatible = cameraCapabilities?.contains(
+                    CameraMetadata.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE
+                ) ?: false
+                /* ... */
             }
-            val cameraCapabilities = characteristics.get(
-                CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES
-            )
-            val isBackwardCompatible = cameraCapabilities?.contains(
-                CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE
-            ) ?: false
-            if (isBackwardCompatible) {
-                // ...
-            }
+        } catch (e: CameraAccessException) {
+            e.message?.let { Log.e(TAG, it) }
+            /* ... */
         }
         // [END android_camera2_camera_enumeration_iterate_cameras]
     }
@@ -54,72 +56,92 @@ private object CameraEnumerationSnippets {
         cameraManager: CameraManager,
         facing: Int = CameraMetadata.LENS_FACING_BACK
     ): String? {
-        val cameraIds = cameraManager.cameraIdList
-        cameraIds.forEach { id ->
-            val characteristics = cameraManager.getCameraCharacteristics(id)
-            val hasCapability = characteristics.get(
-                CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES
-            )?.contains(
-                CameraMetadata.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE
-            ) ?: false
-            val cameraFacing = characteristics.get(CameraCharacteristics.LENS_FACING)
-            if (hasCapability && (cameraFacing == facing)) {
-                return id
+        try {
+            // Get list of all compatible cameras
+            val cameraIds = cameraManager.cameraIdList.filter {
+                val characteristics = cameraManager.getCameraCharacteristics(it)
+                val capabilities = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
+                capabilities?.contains(
+                    CameraMetadata.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE
+                ) ?: false
             }
+
+            // Iterate over the list of cameras and return the first one matching desired
+            // lens-facing configuration
+            cameraIds.forEach {
+                val characteristics = cameraManager.getCameraCharacteristics(it)
+                if (characteristics.get(CameraCharacteristics.LENS_FACING) == facing) {
+                    return it
+                }
+            }
+
+            // If no camera matched desired orientation, return the first one from the list
+            return cameraIds.firstOrNull()
+        } catch (e: CameraAccessException) {
+            e.message?.let { Log.e(TAG, it) }
         }
+        // [START_EXCLUDE silent]
         return null
+        // [END_EXCLUDE]
     }
     // [END android_camera2_camera_enumeration_get_first_camera_id_facing]
 
     // [START android_camera2_camera_enumeration_filter_cameras]
     fun filterCompatibleCameras(
-        cameraManager: CameraManager,
-        cameraIds: Array<String>
+        cameraIds: Array<String>,
+        cameraManager: CameraManager
     ): List<String> {
-        return cameraIds.filter { id ->
-            val characteristics = cameraManager.getCameraCharacteristics(id)
-            characteristics.get(
-                CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES
-            )?.contains(
+        return cameraIds.filter {
+            val characteristics = cameraManager.getCameraCharacteristics(it)
+            characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)?.contains(
                 CameraMetadata.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE
             ) ?: false
         }
     }
 
     fun filterCameraIdsFacing(
-        cameraManager: CameraManager,
         cameraIds: List<String>,
+        cameraManager: CameraManager,
         facing: Int
     ): List<String> {
-        return cameraIds.filter { id ->
-            val characteristics = cameraManager.getCameraCharacteristics(id)
+        return cameraIds.filter {
+            val characteristics = cameraManager.getCameraCharacteristics(it)
             characteristics.get(CameraCharacteristics.LENS_FACING) == facing
         }
     }
 
-    fun getNextCameraId(
-        cameraManager: CameraManager,
-        currCameraId: String? = null,
-        facing: Int? = null
-    ): String? {
-        // Return all compatible cameras
-        val cameraIds = filterCompatibleCameras(cameraManager, cameraManager.cameraIdList)
+    fun getNextCameraId(cameraManager: CameraManager, currCameraId: String? = null): String? {
+        // Get all front, back and external cameras in 3 separate lists
+        val cameraIds = filterCompatibleCameras(cameraManager.cameraIdList, cameraManager)
+        val backCameras = filterCameraIdsFacing(
+            cameraIds, cameraManager, CameraMetadata.LENS_FACING_BACK
+        )
+        val frontCameras = filterCameraIdsFacing(
+            cameraIds, cameraManager, CameraMetadata.LENS_FACING_FRONT
+        )
+        val externalCameras = filterCameraIdsFacing(
+            cameraIds, cameraManager, CameraMetadata.LENS_FACING_EXTERNAL
+        )
 
-        // Return cameras that face the same direction, if specified
-        val cameraFacingIds = facing?.let {
-            filterCameraIdsFacing(cameraManager, cameraIds, it)
-        } ?: cameraIds
+        // The recommended order of iteration is: all external, first back, first front
+        val allCameras = (
+            externalCameras + listOf(
+                backCameras.firstOrNull(), frontCameras.firstOrNull()
+            )
+            ).filterNotNull()
 
-        // Return the next camera in the list
-        if (cameraFacingIds.isEmpty()) return null
-        return currCameraId?.let { id ->
-            val currIndex = cameraFacingIds.indexOf(id)
-            if (currIndex >= 0) {
-                cameraFacingIds[(currIndex + 1) % cameraFacingIds.size]
-            } else {
-                cameraFacingIds[0]
-            }
-        } ?: cameraFacingIds[0]
+        // Get the index of the currently selected camera in the list
+        val cameraIndex = allCameras.indexOf(currCameraId)
+
+        // The selected camera may not be in the list, for example it could be an
+        // external camera that has been removed by the user
+        return if (cameraIndex == -1) {
+            // Return the first camera from the list
+            allCameras.getOrNull(0)
+        } else {
+            // Return the next camera from the list, wrap around if necessary
+            allCameras.getOrNull((cameraIndex + 1) % allCameras.size)
+        }
     }
     // [END android_camera2_camera_enumeration_filter_cameras]
 }

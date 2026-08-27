@@ -16,6 +16,7 @@
 
 package com.example.camerax.snippets.camera2
 
+import android.Manifest
 import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraDevice
@@ -25,9 +26,13 @@ import android.hardware.camera2.CaptureRequest
 import android.hardware.camera2.params.OutputConfiguration
 import android.hardware.camera2.params.SessionConfiguration
 import android.os.AsyncTask
+import android.os.Build
 import android.view.Surface
+import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import java.util.concurrent.Executor
 
+@RequiresApi(Build.VERSION_CODES.P)
 private object MultiCameraSnippets {
 
     // [START android_camera2_multi_camera_find_dual_cameras]
@@ -72,6 +77,7 @@ private object MultiCameraSnippets {
     }
     // [END android_camera2_multi_camera_find_dual_cameras]
 
+    @RequiresPermission(Manifest.permission.CAMERA)
     // [START android_camera2_multi_camera_open_dual_camera]
     fun openDualCamera(
         cameraManager: CameraManager,
@@ -105,6 +111,9 @@ private object MultiCameraSnippets {
     typealias DualCameraOutputs =
         Triple<MutableList<Surface>?, MutableList<Surface>?, MutableList<Surface>?>
 
+    // [START_EXCLUDE silent]
+    @RequiresPermission(Manifest.permission.CAMERA)
+    // [END_EXCLUDE]
     fun createDualCameraSession(
         cameraManager: CameraManager,
         dualCamera: DualCamera,
@@ -181,6 +190,7 @@ private object MultiCameraSnippets {
     }
     // [END android_camera2_multi_camera_find_short_long_camera_pair]
 
+    @RequiresPermission(Manifest.permission.CAMERA)
     fun zoomExample(
         manager: CameraManager,
         surface1: Surface,

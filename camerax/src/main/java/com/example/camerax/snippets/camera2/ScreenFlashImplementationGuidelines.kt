@@ -248,7 +248,7 @@ private class ScreenFlashSetupHelper(
     private val cameraHandler: Handler,
     private val previewSurface: Surface,
     private val imageReaderSurface: Surface,
-    private val repeatingCaptureCallback: CameraCaptureSession.CaptureCallback
+    private val repeatingCaptureCallback: ConvergenceAwaitableCaptureCallback
 ) {
     private lateinit var camera: CameraDevice
     private lateinit var session: CameraCaptureSession
@@ -314,13 +314,17 @@ private class ScreenFlashSetupHelper(
         precaptureDeferred.await()
 
         // Precapture trigger request has been processed, we can wait for AE & AWB convergence now
-        (repeatingCaptureCallback as? ConvergenceAwaitable)?.awaitAeAwbConvergence()
+        repeatingCaptureCallback.awaitAeAwbConvergence()
     }
     // [END android_camera2_screen_flash_run_precapture_sequence]
 
     interface ConvergenceAwaitable {
         suspend fun awaitAeAwbConvergence()
     }
+
+    abstract class ConvergenceAwaitableCaptureCallback :
+        CameraCaptureSession.CaptureCallback(),
+        ConvergenceAwaitable
 }
 
 private class ScreenFlashActivity : AppCompatActivity() {

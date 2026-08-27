@@ -16,142 +16,179 @@
 
 package com.example.camerax.snippets.camera2
 
+import android.app.Activity
 import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraMetadata
 import android.hardware.camera2.CaptureRequest
-import android.hardware.camera2.TotalCaptureResult
 import android.hardware.camera2.params.OutputConfiguration
 import android.hardware.camera2.params.SessionConfiguration
+import android.media.ImageReader
 import android.os.Build
-import android.os.Handler
 import android.view.Surface
-import java.util.concurrent.Executors
+import android.view.SurfaceView
+import androidx.annotation.RequiresApi
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+private class CaptureSessionSetupActivity(
+    private val surfaceViewId: Int,
+    private val imageReaderWidth: Int,
+    private val imageReaderHeight: Int,
+    private val imageReaderFormat: Int,
+    private val imageReaderMaxImages: Int,
+    private val session: SessionConfiguration
+) : Activity() {
+
+    fun prepareTargets() {
+        // [START android_camera2_capture_sessions_requests_configure_session]
+        // Retrieve the target surfaces, which might be coming from a number of places:
+        // 1. SurfaceView, if you want to display the image directly to the user
+        // 2. ImageReader, if you want to read each frame or perform frame-by-frame
+        // analysis
+        // 3. OpenGL Texture or TextureView, although discouraged for maintainability
+        // [START_EXCLUDE silent]
+        /*
+        // [END_EXCLUDE]
+              reasons
+        // [START_EXCLUDE silent]
+         */
+        // [END_EXCLUDE]
+        // 4. RenderScript.Allocation, if you want to do parallel processing
+        val surfaceView = findViewById<SurfaceView>(
+            // [START_EXCLUDE silent]
+            surfaceViewId
+            // [END_EXCLUDE]
+            /* ... */
+        )
+        val imageReader = ImageReader.newInstance(
+            // [START_EXCLUDE silent]
+            imageReaderWidth, imageReaderHeight, imageReaderFormat, imageReaderMaxImages
+            // [END_EXCLUDE]
+            /* ... */
+        )
+
+        // Remember to call this only *after* SurfaceHolder.Callback.surfaceCreated()
+        val previewSurface = surfaceView.holder.surface
+        val imReaderSurface = imageReader.surface
+        val targets = listOf(previewSurface, imReaderSurface)
+
+        // Create a capture session using the predefined targets; this also involves
+        // defining the session state callback to be notified of when the session is
+        // ready
+        // Setup Stream Use Case while setting up your Output Configuration.
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        fun configureSession(device: CameraDevice, targets: List<Surface>) {
+            val configs = mutableListOf<OutputConfiguration>()
+            val streamUseCase = CameraMetadata
+                .SCALER_AVAILABLE_STREAM_USE_CASES_PREVIEW_VIDEO_STILL
+
+            targets.forEach {
+                val config = OutputConfiguration(it)
+                config.streamUseCase = streamUseCase.toLong()
+                configs.add(config)
+            }
+            /* ... */
+            device.createCaptureSession(session)
+        }
+        // [END android_camera2_capture_sessions_requests_configure_session]
+    }
+}
 
 private object CaptureSessionsRequestsSnippets {
 
-    // [START android_camera2_capture_sessions_requests_configure_session]
-    private fun configureSession(
-        camera: CameraDevice,
-        previewSurface: Surface,
-        recordSurface: Surface,
-        stateCallback: CameraCaptureSession.StateCallback,
-        cameraHandler: Handler
+    fun buildSingleRequest(
+        sessionFromStateCallback: CameraCaptureSession,
+        previewSurface: Surface
     ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val previewConfig = OutputConfiguration(previewSurface)
-            val recordConfig = OutputConfiguration(recordSurface)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                previewConfig.streamUseCase =
-                    CameraMetadata.SCALER_AVAILABLE_STREAM_USE_CASES_PREVIEW.toLong()
-                recordConfig.streamUseCase =
-                    CameraMetadata.SCALER_AVAILABLE_STREAM_USE_CASES_VIDEO_RECORD.toLong()
-            }
-
-            val sessionConfig = SessionConfiguration(
-                SessionConfiguration.SESSION_REGULAR,
-                listOf(previewConfig, recordConfig),
-                Executors.newSingleThreadExecutor(),
-                stateCallback
-            )
-            camera.createCaptureSession(sessionConfig)
-        } else {
-            camera.createCaptureSession(
-                listOf(previewSurface, recordSurface),
-                stateCallback,
-                cameraHandler
-            )
-        }
-    }
-    // [END android_camera2_capture_sessions_requests_configure_session]
-
-    fun buildSingleRequest(camera: CameraDevice, previewSurface: Surface) {
         // [START android_camera2_capture_sessions_requests_single_request]
-        // Build a single capture request.
-        val captureRequest = camera.createCaptureRequest(
-            CameraDevice.TEMPLATE_PREVIEW
-        ).apply { addTarget(previewSurface) }
+        val session: CameraCaptureSession = /* ... */ // from CameraCaptureSession.StateCallback
+            // [START_EXCLUDE silent]
+            sessionFromStateCallback
+        // [END_EXCLUDE]
+        val captureRequest = session.device.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+        captureRequest.addTarget(previewSurface)
         // [END android_camera2_capture_sessions_requests_single_request]
     }
 
     fun captureRequestSample(
-        session: CameraCaptureSession,
-        captureRequest: CaptureRequest.Builder,
-        cameraHandler: Handler
+        sessionFromStateCallback: CameraCaptureSession,
+        captureRequestBuilder: CaptureRequest.Builder
     ) {
         // [START android_camera2_capture_sessions_requests_capture]
-        session.capture(
-            captureRequest.build(),
-            object : CameraCaptureSession.CaptureCallback() {
-                override fun onCaptureCompleted(
-                    session: CameraCaptureSession,
-                    request: CaptureRequest,
-                    result: TotalCaptureResult
-                ) {
-                    // Process the result
-                }
-            },
-            cameraHandler
-        )
+        val session: CameraCaptureSession = /* ... */ // from CameraCaptureSession.StateCallback
+            // [START_EXCLUDE silent]
+            sessionFromStateCallback
+        // [END_EXCLUDE]
+        // [START_EXCLUDE silent]
+        /*
+        // [END_EXCLUDE]
+        val captureRequest: CaptureRequest = ...  // from CameraDevice.createCaptureRequest()
+        // [START_EXCLUDE silent]
+         */
+        val captureRequest = captureRequestBuilder
+        // [END_EXCLUDE]
+
+        // The first null argument corresponds to the capture callback, which you
+        // provide if you want to retrieve frame metadata or keep track of failed capture
+        // requests that can indicate dropped frames; the second null argument
+        // corresponds to the Handler used by the asynchronous callback, which falls
+        // back to the current thread's looper if null
+        session.capture(captureRequest.build(), null, null)
         // [END android_camera2_capture_sessions_requests_capture]
     }
 
     fun repeatingRequestSample(
-        session: CameraCaptureSession,
-        previewRequest: CaptureRequest,
-        cameraHandler: Handler
+        sessionFromStateCallback: CameraCaptureSession,
+        captureRequestBuilder: CaptureRequest.Builder
     ) {
         // [START android_camera2_capture_sessions_requests_repeating_request]
-        session.setRepeatingRequest(
-            previewRequest,
-            object : CameraCaptureSession.CaptureCallback() {
-                // [START_EXCLUDE]
-                override fun onCaptureCompleted(
-                    session: CameraCaptureSession,
-                    request: CaptureRequest,
-                    result: TotalCaptureResult
-                ) {}
-                /*
-                // [END_EXCLUDE]
-                override fun onCaptureCompleted(...) { ... }
-                // [START_EXCLUDE]
-                 */
-                // [END_EXCLUDE]
-            },
-            cameraHandler
-        )
+        val session: CameraCaptureSession = /* ... */ // from CameraCaptureSession.StateCallback
+            // [START_EXCLUDE silent]
+            sessionFromStateCallback
+        // [END_EXCLUDE]
+        // [START_EXCLUDE silent]
+        /*
+        // [END_EXCLUDE]
+        val captureRequest: CaptureRequest = ...  // from CameraDevice.createCaptureRequest()
+        // [START_EXCLUDE silent]
+         */
+        val captureRequest = captureRequestBuilder
+        // [END_EXCLUDE]
+
+        // This keeps sending the capture request as frequently as possible until
+        // the
+        // session is torn down or session.stopRepeating() is called
+        // session.setRepeatingRequest(captureRequest.build(), null, null)
         // [END android_camera2_capture_sessions_requests_repeating_request]
     }
 
     fun interleavedRequestsSample(
-        camera: CameraDevice,
-        session: CameraCaptureSession,
-        imageReaderSurface: Surface,
-        previewRequest: CaptureRequest.Builder,
-        previewCaptureCallback: CameraCaptureSession.CaptureCallback,
-        stillCaptureCallback: CameraCaptureSession.CaptureCallback,
-        cameraHandler: Handler
+        sessionFromStateCallback: CameraCaptureSession,
+        previewSurface: Surface,
+        imReaderSurface: Surface
     ) {
         // [START android_camera2_capture_sessions_requests_interleaved_requests]
-        // Build the single still capture request
-        val stillCaptureRequest = camera.createCaptureRequest(
+        val session: CameraCaptureSession = /* ... */ // from CameraCaptureSession.StateCallback
+            // [START_EXCLUDE silent]
+            sessionFromStateCallback
+        // [END_EXCLUDE]
+
+        // Create the repeating request and dispatch it
+        val repeatingRequest = session.device.createCaptureRequest(
+            CameraDevice.TEMPLATE_PREVIEW
+        )
+        repeatingRequest.addTarget(previewSurface)
+        session.setRepeatingRequest(repeatingRequest.build(), null, null)
+
+        // Some time later...
+
+        // Create the single request and dispatch it
+        // NOTE: This can disrupt the ongoing repeating request momentarily
+        val singleRequest = session.device.createCaptureRequest(
             CameraDevice.TEMPLATE_STILL_CAPTURE
-        ).apply { addTarget(imageReaderSurface) }
-
-        // Set repeating request for continuous preview stream
-        session.setRepeatingRequest(
-            previewRequest.build(),
-            previewCaptureCallback,
-            cameraHandler
         )
-
-        // Capture single still frame without interrupting repeating request
-        session.capture(
-            stillCaptureRequest.build(),
-            stillCaptureCallback,
-            cameraHandler
-        )
+        singleRequest.addTarget(imReaderSurface)
+        session.capture(singleRequest.build(), null, null)
         // [END android_camera2_capture_sessions_requests_interleaved_requests]
     }
 }

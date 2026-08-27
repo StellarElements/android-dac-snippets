@@ -25,7 +25,7 @@ import androidx.core.content.ContextCompat
 import com.google.common.util.concurrent.FutureCallback
 import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
-import kotlin.math.roundToInt
+import kotlin.math.min
 
 // [START_EXCLUDE]
 interface CameraViewfinder {
@@ -68,46 +68,78 @@ private class CameraPreviewHelper(
     // [END android_camera2_camera_preview_viewfinder_request_surface]
 }
 
-private class AutoFitSurfaceView(context: Context) : SurfaceView(context) {
+private class AutoFitSurfaceView(
+    context: Context,
+    private val characteristics: CameraCharacteristics,
+    private val surfaceRotationDegrees: Int,
+    private val previewWidth: Float,
+    private val previewHeight: Float
+) : SurfaceView(context) {
+
+    private fun computeRelativeRotation(
+        characteristics: CameraCharacteristics,
+        surfaceRotationDegrees: Int
+    ): Int = CameraPreviewSnippets.computeRelativeRotation(characteristics, surfaceRotationDegrees)
+
     // [START android_camera2_camera_preview_surfaceview_onmeasure]
-    private var aspectRatio = 4f / 3f
-
-    fun setAspectRatio(width: Int, height: Int) {
-        aspectRatio = width.toFloat() / height.toFloat()
-        holder.setFixedSize(width, height)
-        requestLayout()
-    }
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val width = MeasureSpec.getSize(widthMeasureSpec)
         val height = MeasureSpec.getSize(heightMeasureSpec)
-        if (width == 0 || height == 0) return
 
-        if (width > height * aspectRatio) {
-            setMeasuredDimension(width, (width / aspectRatio).roundToInt())
-        } else {
-            setMeasuredDimension((height * aspectRatio).roundToInt(), height)
+        val relativeRotation = computeRelativeRotation(characteristics, surfaceRotationDegrees)
+
+        if (previewWidth > 0f && previewHeight > 0f) {
+            /* Scale factor required to scale the preview to its original size on the x-axis. */
+            val scaleX =
+                if (relativeRotation % 180 == 0) {
+                    width.toFloat() / previewWidth
+                } else {
+                    width.toFloat() / previewHeight
+                }
+            /* Scale factor required to scale the preview to its original size on the y-axis. */
+            val scaleY =
+                if (relativeRotation % 180 == 0) {
+                    height.toFloat() / previewHeight
+                } else {
+                    height.toFloat() / previewWidth
+                }
+
+            /* Scale factor required to fit the preview to the SurfaceView size. */
+            val finalScale = min(scaleX, scaleY)
+
+            setScaleX(1 / scaleX * finalScale)
+            setScaleY(1 / scaleY * finalScale)
         }
+        setMeasuredDimension(width, height)
     }
     // [END android_camera2_camera_preview_surfaceview_onmeasure]
 }
 
 private object CameraPreviewSnippets {
     // [START android_camera2_camera_preview_compute_relative_rotation]
-    fun computeRelativeRotation(
+    /**
+     * Computes rotation required to transform the camera sensor output orientation to the
+     * device's current orientation in degrees.
+     *
+     * @param characteristics The CameraCharacteristics to query for the sensor orientation.
+     * @param surfaceRotationDegrees The current device orientation as a Surface constant.
+     * @return Relative rotation of the camera sensor output.
+     */
+    public fun computeRelativeRotation(
         characteristics: CameraCharacteristics,
         surfaceRotationDegrees: Int
     ): Int {
         val sensorOrientationDegrees =
             characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)!!
 
+        // Reverse device orientation for back-facing cameras.
         val sign = if (characteristics.get(CameraCharacteristics.LENS_FACING) ==
             CameraCharacteristics.LENS_FACING_FRONT
         ) 1 else -1
 
-        // Reverse device orientation for front-facing cameras
-        return (sensorOrientationDegrees - (surfaceRotationDegrees * sign) + 360) % 360
+        // Calculate desired orientation relative to camera orientation to make
+        // the image upright relative to the device orientation.
+        return (sensorOrientationDegrees - surfaceRotationDegrees * sign + 360) % 360
     }
     // [END android_camera2_camera_preview_compute_relative_rotation]
 }
