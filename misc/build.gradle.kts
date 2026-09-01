@@ -62,9 +62,6 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.tracing)
     implementation(libs.androidx.work.runtime)
-    implementation("androidx.work:work-testing:2.10.0")
-    implementation("androidx.work:work-rxjava2:2.10.0")
-    implementation(libs.androidx.test.ext.junit)
 
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
@@ -92,4 +89,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.work.testing)
+    androidTestImplementation(libs.androidx.work.rxjava2)
 }
