@@ -1,0 +1,97 @@
+# A pull request check for THIS FORK ONLY.
+#
+# Upstream's own `build.yml` builds every module on both `push` and
+# `pull_request`, so a single pull request here costs two full-repository builds
+# of about 24 minutes each. Almost none of that work is about the change: a
+# snippet migration touches one module, and the other twenty-five are rebuilt to
+# prove nothing.
+#
+# This builds the modules the pull request actually changes, and nothing else.
+#
+# Spotless is named per module for the same reason as the build: the check that
+# matters is the one over the files the pull request changed.
+#
+# It is guarded to this repository, the same way upstream guards `apply_spotless`
+# against running on forks. If this file ever reaches android/snippets by riding
+# along on a branch, it does nothing there. `upstream-preflight check` refuses a
+# branch that carries it, but a guard that does not depend on our tooling being
+# run is worth the one line.
+name: Fork PR check
+
+on:
+  pull_request:
+    branches: ['*']
+
+# One run per pull request. A new push cancels the run still going, because the
+# answer for the older commit stopped being interesting the moment it was pushed
+# over.
+concurrency:
+  group: fork-pr-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  changed-modules:
+    if: github.repository == 'StellarElements/android-dac-snippets'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Work out which modules the pull request touches
+        id: modules
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import re, subprocess
+
+          base = "${{ github.event.pull_request.base.sha }}"
+          head = "${{ github.event.pull_request.head.sha }}"
+          changed = subprocess.run(
+              ["git", "diff", "--name-only", base, head],
+              capture_output=True, text=True, check=True,
+          ).stdout.split()
+
+          # Read the modules from settings.gradle.kts on the branch, so a pull
+          # request that adds a module is covered by its own run.
+          settings = open("settings.gradle.kts").read()
+          modules = re.findall(r'"(:[A-Za-z0-9_:.-]+)"', settings)
+          # Longest directory first, so `:compose:snippets` wins over `:compose`.
+          by_dir = sorted(
+              ((m.lstrip(":").replace(":", "/"), m) for m in modules),
+              key=lambda p: -len(p[0]),
+          )
+
+          hit = []
+          for path in changed:
+              for directory, module in by_dir:
+                  if path.startswith(directory + "/"):
+                      if module not in hit:
+                          hit.append(module)
+                      break
+
+          tasks = [f"{m}:assembleDebug" for m in hit] + [f"{m}:spotlessCheck" for m in hit]
+          # A change outside every module — settings, root Gradle files, this
+          # workflow — still gets the root format check rather than nothing.
+          if not tasks:
+              tasks = ["spotlessCheck"]
+          print("modules=" + (" ".join(hit) or "(none)"))
+          print("tasks=" + " ".join(tasks))
+          PY
+
+      - name: What will be built
+        run: |
+          echo "Changed modules: ${{ steps.modules.outputs.modules }}"
+          echo "Gradle tasks:    ${{ steps.modules.outputs.tasks }}"
+
+      - name: set up Java 25
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: '25'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Build and check the changed modules
+        run: ./gradlew ${{ steps.modules.outputs.tasks }} --stacktrace
