@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-@file:OptIn(kotlinx.parcelize.Experimental::class)
+plugins {
+    `kotlin-dsl`
+}
 
-package com.example.android.basics
+repositories {
+    gradlePluginPortal()
+    mavenCentral()
+}
 
-import android.os.Parcelable
-import kotlinx.parcelize.DataClass
-import kotlinx.parcelize.Parcelize
+dependencies {
+    testImplementation(kotlin("test"))
+    testImplementation("junit:junit:4.13.2")
+}
 
-private object DataClassSnippet {
-    // [START android_kotlin_parcelize_data_class]
-    // @file:OptIn(kotlinx.parcelize.Experimental::class)
-
-    data class C(val a: Int, val b: String)
-
-    @Parcelize
-    class P(val c: @DataClass C) : Parcelable
-    // [END android_kotlin_parcelize_data_class]
+tasks.test {
+    useJUnit()
 }

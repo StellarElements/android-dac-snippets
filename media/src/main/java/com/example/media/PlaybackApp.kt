@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-@file:OptIn(kotlinx.parcelize.Experimental::class)
+package com.example.media
 
-package com.example.android.basics
+import android.content.Context
+import androidx.media3.exoplayer.ExoPlayer
 
-import android.os.Parcelable
-import kotlinx.parcelize.DataClass
-import kotlinx.parcelize.Parcelize
-
-private object DataClassSnippet {
-    // [START android_kotlin_parcelize_data_class]
-    // @file:OptIn(kotlinx.parcelize.Experimental::class)
-
-    data class C(val a: Int, val b: String)
-
-    @Parcelize
-    class P(val c: @DataClass C) : Parcelable
-    // [END android_kotlin_parcelize_data_class]
+private fun createExoPlayer(context: Context) {
+    // [START android_media_playback_app_create_exoplayer]
+    val player = ExoPlayer.Builder(context).build()
+    // [END android_media_playback_app_create_exoplayer]
 }
