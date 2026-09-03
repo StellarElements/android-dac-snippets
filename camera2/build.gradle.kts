@@ -56,14 +56,11 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.google.android.material)
-    implementation(libs.guava)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.guava)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

@@ -18,53 +18,8 @@ package com.example.camera2.snippets
 
 import android.content.Context
 import android.hardware.camera2.CameraCharacteristics
-import android.util.Size
-import android.view.Surface
 import android.view.SurfaceView
-import androidx.core.content.ContextCompat
-import com.google.common.util.concurrent.FutureCallback
-import com.google.common.util.concurrent.Futures
-import com.google.common.util.concurrent.ListenableFuture
 import kotlin.math.min
-
-interface CameraViewfinder {
-    fun requestSurfaceAsync(request: ViewfinderSurfaceRequest): ListenableFuture<Surface>
-}
-
-class ViewfinderSurfaceRequest(
-    val resolution: Size,
-    val characteristics: CameraCharacteristics
-)
-
-private class CameraPreviewHelper(
-    private val width: Int,
-    private val height: Int,
-    private val characteristics: CameraCharacteristics,
-    private val cameraViewfinder: CameraViewfinder,
-    private val context: Context
-) {
-
-    // [START android_camera2_camera_preview_viewfinder_request_surface]
-    fun startCamera() {
-        val previewResolution = Size(width, height)
-        val viewfinderSurfaceRequest =
-            ViewfinderSurfaceRequest(previewResolution, characteristics)
-        val surfaceListenableFuture =
-            cameraViewfinder.requestSurfaceAsync(viewfinderSurfaceRequest)
-
-        Futures.addCallback(
-            surfaceListenableFuture,
-            object : FutureCallback<Surface> {
-                override fun onSuccess(surface: Surface) {
-                    /* create a CaptureSession using this surface as usual */
-                }
-                override fun onFailure(t: Throwable) { /* something went wrong */ }
-            },
-            ContextCompat.getMainExecutor(context)
-        )
-    }
-    // [END android_camera2_camera_preview_viewfinder_request_surface]
-}
 
 private class AutoFitSurfaceView(
     context: Context,
