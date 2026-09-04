@@ -29,7 +29,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
-import androidx.core.content.pm.ShortcutManagerCompat.FLAG_MATCH_PINNED
 import androidx.core.graphics.drawable.IconCompat
 import com.example.compose.snippets.R
 
@@ -90,7 +89,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         if (ShortcutManagerCompat.getDynamicShortcuts(this).isEmpty()) {
             // Application restored. Re-publish dynamic shortcuts.
-            if (ShortcutManagerCompat.getShortcuts(this, FLAG_MATCH_PINNED).isNotEmpty()) {
+            val pinned = ShortcutManagerCompat.getShortcuts(
+                this,
+                ShortcutManagerCompat.FLAG_MATCH_PINNED
+            )
+            if (pinned.isNotEmpty()) {
                 // Pinned shortcuts are restored. Use updateShortcuts() to make
                 // sure they contain up-to-date information.
             }
