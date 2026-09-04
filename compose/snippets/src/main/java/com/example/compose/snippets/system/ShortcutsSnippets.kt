@@ -69,10 +69,8 @@ fun Context.pinShortcut() {
         // Configure the intent so that your app's broadcast receiver gets the
         // callback successfully. For details, see PendingIntent.getBroadcast().
         val successCallback = PendingIntent.getBroadcast(
-            context, /* request code */
-            0,
-            pinnedShortcutCallbackIntent, /* flags */
-            PendingIntent.FLAG_IMMUTABLE
+            context, /* request code */ 0,
+            pinnedShortcutCallbackIntent, /* flags */ PendingIntent.FLAG_IMMUTABLE
         )
 
         shortcutManager.requestPinShortcut(
@@ -89,11 +87,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         if (ShortcutManagerCompat.getDynamicShortcuts(this).isEmpty()) {
             // Application restored. Re-publish dynamic shortcuts.
-            val pinned = ShortcutManagerCompat.getShortcuts(
-                this,
-                ShortcutManagerCompat.FLAG_MATCH_PINNED
-            )
-            if (pinned.isNotEmpty()) {
+            if (ShortcutManagerCompat.getShortcuts(this, ShortcutManagerCompat.FLAG_MATCH_PINNED).isNotEmpty()) {
                 // Pinned shortcuts are restored. Use updateShortcuts() to make
                 // sure they contain up-to-date information.
             }
