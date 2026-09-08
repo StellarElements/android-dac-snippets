@@ -42,11 +42,11 @@ private object CameraEnumerationSnippets {
                 val isBackwardCompatible = cameraCapabilities?.contains(
                     CameraMetadata.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE
                 ) ?: false
-                /* ... */
+                // ...
             }
         } catch (e: CameraAccessException) {
             e.message?.let { Log.e(TAG, it) }
-            /* ... */
+            // ...
         }
         // [END android_camera2_camera_enumeration_iterate_cameras]
     }
@@ -79,10 +79,8 @@ private object CameraEnumerationSnippets {
             return cameraIds.firstOrNull()
         } catch (e: CameraAccessException) {
             e.message?.let { Log.e(TAG, it) }
+            return null
         }
-        // [START_EXCLUDE silent]
-        return null
-        // [END_EXCLUDE]
     }
     // [END android_camera2_camera_enumeration_get_first_camera_id_facing]
 

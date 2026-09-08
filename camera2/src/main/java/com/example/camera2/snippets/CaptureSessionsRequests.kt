@@ -52,13 +52,13 @@ private class CaptureSessionSetupActivity(
             // [START_EXCLUDE silent]
             surfaceViewId
             // [END_EXCLUDE]
-            /* ... */
+            // ...
         )
         val imageReader = ImageReader.newInstance(
             // [START_EXCLUDE silent]
             imageReaderWidth, imageReaderHeight, imageReaderFormat, imageReaderMaxImages
             // [END_EXCLUDE]
-            /* ... */
+            // ...
         )
 
         // Remember to call this only *after* SurfaceHolder.Callback.surfaceCreated()
@@ -81,7 +81,7 @@ private class CaptureSessionSetupActivity(
                 config.streamUseCase = streamUseCase.toLong()
                 configs.add(config)
             }
-            /* ... */
+            // ...
             device.createCaptureSession(session)
         }
         // [END android_camera2_capture_sessions_requests_configure_session]
@@ -113,13 +113,9 @@ private object CaptureSessionsRequestsSnippets {
             // [START_EXCLUDE silent]
             sessionFromStateCallback
         // [END_EXCLUDE]
-        // [START_EXCLUDE silent]
-        /*
-        // [END_EXCLUDE]
-        val captureRequest: CaptureRequest = ...  // from CameraDevice.createCaptureRequest()
-        // [START_EXCLUDE silent]
-         */
-        val captureRequest = captureRequestBuilder
+        val captureRequest: CaptureRequest.Builder = /* ... */ // from CameraDevice.createCaptureRequest()
+            // [START_EXCLUDE silent]
+            captureRequestBuilder
         // [END_EXCLUDE]
 
         // The first null argument corresponds to the capture callback, which you
@@ -140,18 +136,13 @@ private object CaptureSessionsRequestsSnippets {
             // [START_EXCLUDE silent]
             sessionFromStateCallback
         // [END_EXCLUDE]
-        // [START_EXCLUDE silent]
-        /*
-        // [END_EXCLUDE]
-        val captureRequest: CaptureRequest = ...  // from CameraDevice.createCaptureRequest()
-        // [START_EXCLUDE silent]
-         */
-        val captureRequest = captureRequestBuilder
+        val captureRequest: CaptureRequest.Builder = /* ... */ // from CameraDevice.createCaptureRequest()
+            // [START_EXCLUDE silent]
+            captureRequestBuilder
         // [END_EXCLUDE]
 
         // This keeps sending the capture request as frequently as possible until
-        // the
-        // session is torn down or session.stopRepeating() is called
+        // the session is torn down or session.stopRepeating() is called
         // session.setRepeatingRequest(captureRequest.build(), null, null)
         // [END android_camera2_capture_sessions_requests_repeating_request]
     }
