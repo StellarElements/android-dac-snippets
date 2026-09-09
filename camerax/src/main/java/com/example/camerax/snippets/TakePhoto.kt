@@ -48,14 +48,14 @@ private class TakePhoto(
 ) {
     // [START android_camerax_take_photo_save_to_file]
     fun onClick() {
-        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(
-            File(
-                /* ... */
-                // [START_EXCLUDE silent]
-                ""
-                // [END_EXCLUDE]
-            )
-        ).build()
+        // [START_EXCLUDE silent]
+        /*
+        // [END_EXCLUDE]
+        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(File(...)).build()
+        // [START_EXCLUDE silent]
+         */
+        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(File("")).build()
+        // [END_EXCLUDE]
         imageCapture.takePicture(
             outputFileOptions, cameraExecutor,
             object : ImageCapture.OnImageSavedCallback {
