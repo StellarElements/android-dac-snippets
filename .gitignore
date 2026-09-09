@@ -1,5 +1,3 @@
-reports/
-
 *.iml
 .gradle
 gradle/gradle-daemon-jvm.properties
