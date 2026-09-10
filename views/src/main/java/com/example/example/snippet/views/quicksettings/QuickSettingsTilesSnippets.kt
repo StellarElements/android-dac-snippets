@@ -57,7 +57,7 @@ class UpdateTileService : TileService() {
         super.onStartListening()
         val state = getStateFromService()
         qsTile.label = state.label
-        qsTile.contentDescription = qsTile.label
+        qsTile.contentDescription = state.label
         qsTile.state = if (state.enabled) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         qsTile.icon = state.icon
         qsTile.updateTile()
