@@ -36,7 +36,7 @@ private class HdrVideoCaptureSnippets(
     private val cameraManager: CameraManager
 ) {
 
-    // [START android_camera2_hdr_video_capture_is_ten_bit_profile_supported]
+    // [START android_camera_camera2_hdr_video_capture_is_ten_bit_profile_supported]
     private fun isTenBitProfileSupported(cameraId: String): Boolean {
         val cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId)
         val availableCapabilities = cameraCharacteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
@@ -47,9 +47,9 @@ private class HdrVideoCaptureSnippets(
         }
         return false
     }
-    // [END android_camera2_hdr_video_capture_is_ten_bit_profile_supported]
+    // [END android_camera_camera2_hdr_video_capture_is_ten_bit_profile_supported]
 
-    // [START android_camera2_hdr_video_capture_is_hlg_supported]
+    // [START android_camera_camera2_hdr_video_capture_is_hlg_supported]
     @RequiresApi(api = 33)
     private fun isHLGSupported(cameraId: String): Boolean {
         if (isTenBitProfileSupported(cameraId)) {
@@ -63,9 +63,9 @@ private class HdrVideoCaptureSnippets(
         }
         return false
     }
-    // [END android_camera2_hdr_video_capture_is_hlg_supported]
+    // [END android_camera_camera2_hdr_video_capture_is_hlg_supported]
 
-    // [START android_camera2_hdr_video_capture_setup_session]
+    // [START android_camera_camera2_hdr_video_capture_setup_session]
     /**
      * Creates a [CameraCaptureSession] with a dynamic range profile.
      */
@@ -93,16 +93,16 @@ private class HdrVideoCaptureSnippets(
             return false
         }
     }
-    // [END android_camera2_hdr_video_capture_setup_session]
+    // [END android_camera_camera2_hdr_video_capture_setup_session]
 
     fun previewRequestSample(
         session: CameraCaptureSession,
         previewRequest: CaptureRequest,
         cameraHandler: Handler
     ) {
-        // [START android_camera2_hdr_video_capture_preview_request]
+        // [START android_camera_camera2_hdr_video_capture_preview_request]
         session.setRepeatingRequest(previewRequest, null, cameraHandler)
-        // [END android_camera2_hdr_video_capture_preview_request]
+        // [END android_camera_camera2_hdr_video_capture_preview_request]
     }
 
     interface VideoEncoder {
@@ -116,7 +116,7 @@ private class HdrVideoCaptureSnippets(
         currentlyRecording: Boolean,
         encoder: VideoEncoder
     ) {
-        // [START android_camera2_hdr_video_capture_record_request]
+        // [START android_camera_camera2_hdr_video_capture_record_request]
         // Start recording repeating requests, which stops the ongoing preview
         //  repeating requests without having to explicitly call
         //  `session.stopRepeating`
@@ -135,7 +135,7 @@ private class HdrVideoCaptureSnippets(
             },
             cameraHandler
         )
-        // [END android_camera2_hdr_video_capture_record_request]
+        // [END android_camera_camera2_hdr_video_capture_record_request]
     }
 
     @RequiresApi(33)
@@ -148,7 +148,7 @@ private class HdrVideoCaptureSnippets(
         IFRAME_INTERVAL: Int,
         mediaCodec: MediaCodec
     ) {
-        // [START android_camera2_hdr_video_capture_encode_hdr_stream]
+        // [START android_camera_camera2_hdr_video_capture_encode_hdr_stream]
         val mimeType = when {
             dynamicRange == DynamicRangeProfiles.STANDARD -> MediaFormat.MIMETYPE_VIDEO_AVC
             dynamicRange < DynamicRangeProfiles.PUBLIC_MAX ->
@@ -204,6 +204,6 @@ private class HdrVideoCaptureSnippets(
         }
 
         mediaCodec.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE)
-        // [END android_camera2_hdr_video_capture_encode_hdr_stream]
+        // [END android_camera_camera2_hdr_video_capture_encode_hdr_stream]
     }
 }

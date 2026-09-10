@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 
 private class ScreenFlashBrightnessHelper(private val activity: Activity?) {
 
-    // [START android_camera2_screen_flash_brightness_control]
+    // [START android_camera_camera2_screen_flash_brightness_control]
     private var previousBrightness: Float = -1.0f
 
     private fun maximizeScreenBrightness() {
@@ -60,14 +60,14 @@ private class ScreenFlashBrightnessHelper(private val activity: Activity?) {
             }
         }
     }
-    // [END android_camera2_screen_flash_brightness_control]
+    // [END android_camera_camera2_screen_flash_brightness_control]
 }
 
 private class ScreenFlashAeModeHelper(
     private val cameraManager: CameraManager,
     private val cameraId: String
 ) {
-    // [START android_camera2_screen_flash_check_ae_mode]
+    // [START android_camera_camera2_screen_flash_check_ae_mode]
     private val characteristics: CameraCharacteristics by lazy {
         cameraManager.getCameraCharacteristics(cameraId)
     }
@@ -76,11 +76,11 @@ private class ScreenFlashAeModeHelper(
     private fun isExternalFlashAeModeAvailable() =
         characteristics.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_MODES)
             ?.contains(CaptureRequest.CONTROL_AE_MODE_ON_EXTERNAL_FLASH) ?: false
-    // [END android_camera2_screen_flash_check_ae_mode]
+    // [END android_camera_camera2_screen_flash_check_ae_mode]
 }
 
 private object ScreenFlashCallbackAeModeSnippets {
-    // [START android_camera2_screen_flash_capture_callback_ae_mode]
+    // [START android_camera_camera2_screen_flash_capture_callback_ae_mode]
     private val repeatingCaptureCallback = object : CameraCaptureSession.CaptureCallback() {
         private var targetAeMode: Int? = null
         private var aeModeUpdateDeferred: CompletableDeferred<Unit>? = null
@@ -112,7 +112,7 @@ private object ScreenFlashCallbackAeModeSnippets {
             process(result)
         }
     }
-    // [END android_camera2_screen_flash_capture_callback_ae_mode]
+    // [END android_camera_camera2_screen_flash_capture_callback_ae_mode]
 }
 
 private class ScreenFlashRepeatingRequestHelper(
@@ -135,7 +135,7 @@ private class ScreenFlashRepeatingRequestHelper(
         fun awaitAeModeUpdate(targetAeMode: Int) {}
     }
 
-    // [START android_camera2_screen_flash_enable_disable_ae_mode]
+    // [START android_camera_camera2_screen_flash_enable_disable_ae_mode]
     /** [HandlerThread] where all camera operations run */
     private val cameraThread = HandlerThread("CameraThread").apply { start() }
 
@@ -170,11 +170,11 @@ private class ScreenFlashRepeatingRequestHelper(
             )
         }
     }
-    // [END android_camera2_screen_flash_enable_disable_ae_mode]
+    // [END android_camera_camera2_screen_flash_enable_disable_ae_mode]
 }
 
 private object ScreenFlashConvergenceCallbackSnippets {
-    // [START android_camera2_screen_flash_capture_callback_convergence]
+    // [START android_camera_camera2_screen_flash_capture_callback_convergence]
     private val repeatingCaptureCallback = object : CameraCaptureSession.CaptureCallback() {
         private var targetAeMode: Int? = null
         private var aeModeUpdateDeferred: CompletableDeferred<Unit>? = null
@@ -239,7 +239,7 @@ private object ScreenFlashConvergenceCallbackSnippets {
             process(result)
         }
     }
-    // [END android_camera2_screen_flash_capture_callback_convergence]
+    // [END android_camera_camera2_screen_flash_capture_callback_convergence]
 }
 
 private class ScreenFlashSetupHelper(
@@ -262,7 +262,7 @@ private class ScreenFlashSetupHelper(
     }
 
     fun setupCamera() {
-        // [START android_camera2_screen_flash_setup_repeating_request]
+        // [START android_camera_camera2_screen_flash_setup_repeating_request]
         // Open the selected camera
         camera = openCamera(cameraManager, cameraId, cameraHandler)
 
@@ -279,10 +279,10 @@ private class ScreenFlashSetupHelper(
         // This will keep sending the capture request as frequently as possible until the
         // session is torn down or session.stopRepeating() is called
         session.setRepeatingRequest(captureRequest.build(), repeatingCaptureCallback, cameraHandler)
-        // [END android_camera2_screen_flash_setup_repeating_request]
+        // [END android_camera_camera2_screen_flash_setup_repeating_request]
     }
 
-    // [START android_camera2_screen_flash_run_precapture_sequence]
+    // [START android_camera_camera2_screen_flash_run_precapture_sequence]
     private suspend fun runPrecaptureSequence() {
         // Creates a new capture request with CONTROL_AE_PRECAPTURE_TRIGGER_START
         val captureRequest = session.device.createCaptureRequest(
@@ -316,7 +316,7 @@ private class ScreenFlashSetupHelper(
         // Precapture trigger request has been processed, we can wait for AE & AWB convergence now
         repeatingCaptureCallback.awaitAeAwbConvergence()
     }
-    // [END android_camera2_screen_flash_run_precapture_sequence]
+    // [END android_camera_camera2_screen_flash_run_precapture_sequence]
 
     interface ConvergenceAwaitable {
         suspend fun awaitAeAwbConvergence()
@@ -340,7 +340,7 @@ private class ScreenFlashActivity : AppCompatActivity() {
     private fun disableExternalFlashAeMode() {}
 
     fun setupClickListeners() {
-        // [START android_camera2_screen_flash_stitch_together]
+        // [START android_camera_camera2_screen_flash_stitch_together]
         // User clicks captureButton to take picture
         captureButton.setOnClickListener { v ->
             // Apply the screen flash related UI changes
@@ -366,6 +366,6 @@ private class ScreenFlashActivity : AppCompatActivity() {
                 }
             }
         }
-        // [END android_camera2_screen_flash_stitch_together]
+        // [END android_camera_camera2_screen_flash_stitch_together]
     }
 }

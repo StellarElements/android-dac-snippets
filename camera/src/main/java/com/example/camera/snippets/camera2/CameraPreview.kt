@@ -34,7 +34,7 @@ private class AutoFitSurfaceView(
         surfaceRotationDegrees: Int
     ): Int = CameraPreviewSnippets.computeRelativeRotation(characteristics, surfaceRotationDegrees)
 
-    // [START android_camera2_camera_preview_surfaceview_onmeasure]
+    // [START android_camera_camera2_camera_preview_surfaceview_onmeasure]
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val width = MeasureSpec.getSize(widthMeasureSpec)
         val height = MeasureSpec.getSize(heightMeasureSpec)
@@ -65,11 +65,11 @@ private class AutoFitSurfaceView(
         }
         setMeasuredDimension(width, height)
     }
-    // [END android_camera2_camera_preview_surfaceview_onmeasure]
+    // [END android_camera_camera2_camera_preview_surfaceview_onmeasure]
 }
 
 private object CameraPreviewSnippets {
-    // [START android_camera2_camera_preview_compute_relative_rotation]
+    // [START android_camera_camera2_camera_preview_compute_relative_rotation]
     /**
      * Computes rotation required to transform the camera sensor output orientation to the
      * device's current orientation in degrees.
@@ -94,5 +94,5 @@ private object CameraPreviewSnippets {
         // the image upright relative to the device orientation.
         return (sensorOrientationDegrees - surfaceRotationDegrees * sign + 360) % 360
     }
-    // [END android_camera2_camera_preview_compute_relative_rotation]
+    // [END android_camera_camera2_camera_preview_compute_relative_rotation]
 }

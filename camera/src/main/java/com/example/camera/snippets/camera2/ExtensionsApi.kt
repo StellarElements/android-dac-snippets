@@ -35,7 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 
 private object CameraExtensionsSnippets {
-    // [START android_camera2_extensions_api_get_extension_camera_ids]
+    // [START android_camera_camera2_extensions_api_get_extension_camera_ids]
     private fun getExtensionCameraIds(cameraManager: CameraManager): List<String> =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             cameraManager.cameraIdList.filter { cameraId ->
@@ -50,7 +50,7 @@ private object CameraExtensionsSnippets {
                     ) ?: false
             }
         } else emptyList()
-    // [END android_camera2_extensions_api_get_extension_camera_ids]
+    // [END android_camera_camera2_extensions_api_get_extension_camera_ids]
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -63,7 +63,7 @@ private class CameraExtensionFragment(
 
     private var cameraExtensionSession: CameraExtensionSession? = null
 
-    // [START android_camera2_extensions_api_start_extension_session]
+    // [START android_camera_camera2_extensions_api_start_extension_session]
     private val captureCallbacks = object : CameraExtensionSession.ExtensionCaptureCallback() {
         // Implement Capture Callbacks
     }
@@ -118,5 +118,5 @@ private class CameraExtensionFragment(
         )
         cameraDevice.createExtensionSession(extensionConfiguration)
     }
-    // [END android_camera2_extensions_api_start_extension_session]
+    // [END android_camera_camera2_extensions_api_start_extension_session]
 }

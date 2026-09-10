@@ -41,7 +41,7 @@ private object MultipleCameraStreamsSnippets {
         previewSurface: Surface,
         imReaderSurface: Surface
     ) {
-        // [START android_camera2_multiple_camera_streams_combined_request]
+        // [START android_camera_camera2_multiple_camera_streams_combined_request]
         // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
@@ -64,11 +64,11 @@ private object MultipleCameraStreamsSnippets {
         // has its own callback that you have to listen to in order to retrieve the
         // frames so there is no need to set up a callback for the capture request
         session.setRepeatingRequest(combinedRequest.build(), null, null)
-        // [END android_camera2_multiple_camera_streams_combined_request]
+        // [END android_camera_camera2_multiple_camera_streams_combined_request]
     }
 
     fun supportedFormats(characteristics: CameraCharacteristics) {
-        // [START android_camera2_multiple_camera_streams_supported_formats]
+        // [START android_camera_camera2_multiple_camera_streams_supported_formats]
         // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
@@ -79,11 +79,11 @@ private object MultipleCameraStreamsSnippets {
         val supportedFormats = characteristics.get(
             CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
         )!!.outputFormats
-        // [END android_camera2_multiple_camera_streams_supported_formats]
+        // [END android_camera_camera2_multiple_camera_streams_supported_formats]
     }
 
     fun outputSizesByFormat(characteristics: CameraCharacteristics, outputFormat: Int) {
-        // [START android_camera2_multiple_camera_streams_output_sizes_format]
+        // [START android_camera_camera2_multiple_camera_streams_output_sizes_format]
         // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
@@ -95,11 +95,11 @@ private object MultipleCameraStreamsSnippets {
         val sizes = characteristics.get(
             CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
         )!!.getOutputSizes(outputFormat)
-        // [END android_camera2_multiple_camera_streams_output_sizes_format]
+        // [END android_camera_camera2_multiple_camera_streams_output_sizes_format]
     }
 
     fun <T> outputSizesByClass(characteristics: CameraCharacteristics, targetClass: Class<T>) {
-        // [START android_camera2_multiple_camera_streams_output_sizes_class]
+        // [START android_camera_camera2_multiple_camera_streams_output_sizes_class]
         // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
@@ -111,10 +111,10 @@ private object MultipleCameraStreamsSnippets {
         val sizes = characteristics.get(
             CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
         )!!.getOutputSizes(targetClass)
-        // [END android_camera2_multiple_camera_streams_output_sizes_class]
+        // [END android_camera_camera2_multiple_camera_streams_output_sizes_class]
     }
 
-    // [START android_camera2_multiple_camera_streams_maximum_output_size]
+    // [START android_camera_camera2_multiple_camera_streams_maximum_output_size]
     fun <T> getMaximumOutputSize(
         characteristics: CameraCharacteristics,
         targetClass: Class<T>,
@@ -129,9 +129,9 @@ private object MultipleCameraStreamsSnippets {
             config.getOutputSizes(targetClass) else config.getOutputSizes(format)
         return allSizes.maxBy { it.height * it.width }
     }
-    // [END android_camera2_multiple_camera_streams_maximum_output_size]
+    // [END android_camera_camera2_multiple_camera_streams_maximum_output_size]
 
-    // [START android_camera2_multiple_camera_streams_preview_output_size]
+    // [START android_camera_camera2_multiple_camera_streams_preview_output_size]
     /** Helper class used to pre-compute shortest and longest sides of a [Size] */
     class SmartSize(width: Int, height: Int) {
         var size = Size(width, height)
@@ -185,7 +185,7 @@ private object MultipleCameraStreamsSnippets {
         // Then, get the largest output size that is smaller or equal than our max size
         return validSizes.first { it.long <= maxSize.long && it.short <= maxSize.short }.size
     }
-    // [END android_camera2_multiple_camera_streams_preview_output_size]
+    // [END android_camera_camera2_multiple_camera_streams_preview_output_size]
 
     fun <T> getPreviewOutputSize(
         context: Context,
@@ -199,7 +199,7 @@ private object MultipleCameraStreamsSnippets {
     }
 
     fun checkHardwareLevel(characteristics: CameraCharacteristics) {
-        // [START android_camera2_multiple_camera_streams_hardware_level]
+        // [START android_camera_camera2_multiple_camera_streams_hardware_level]
         // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
@@ -217,7 +217,7 @@ private object MultipleCameraStreamsSnippets {
         val hardwareLevel = characteristics.get(
             CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL
         )
-        // [END android_camera2_multiple_camera_streams_hardware_level]
+        // [END android_camera_camera2_multiple_camera_streams_hardware_level]
     }
 }
 
@@ -237,7 +237,7 @@ private class MultipleStreamsActivity : Activity() {
         )
 
     fun setupPreviewSizes(characteristics: CameraCharacteristics) {
-        // [START android_camera2_multiple_camera_streams_get_preview_output_sizes]
+        // [START android_camera_camera2_multiple_camera_streams_get_preview_output_sizes]
         // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
@@ -253,14 +253,14 @@ private class MultipleStreamsActivity : Activity() {
         val imageReaderSize = getPreviewOutputSize(
             context, characteristics, ImageReader::class.java, format = ImageFormat.YUV_420_888
         )
-        // [END android_camera2_multiple_camera_streams_get_preview_output_sizes]
+        // [END android_camera_camera2_multiple_camera_streams_get_preview_output_sizes]
 
         setupSurfaceView(surfaceViewSize)
         setupImageReader(imageReaderSize)
     }
 
     private fun setupSurfaceView(surfaceViewSize: Size) {
-        // [START android_camera2_multiple_camera_streams_surfaceview_callback]
+        // [START android_camera_camera2_multiple_camera_streams_surfaceview_callback]
         // [START_EXCLUDE silent]
         val surfaceView = SurfaceView(this)
         /*
@@ -279,24 +279,24 @@ private class MultipleStreamsActivity : Activity() {
             override fun surfaceDestroyed(holder: SurfaceHolder) {}
             // ...
         })
-        // [END android_camera2_multiple_camera_streams_surfaceview_callback]
+        // [END android_camera_camera2_multiple_camera_streams_surfaceview_callback]
     }
 
     private fun setupImageReader(imageReaderSize: Size) {
-        // [START android_camera2_multiple_camera_streams_image_reader_instance]
+        // [START android_camera_camera2_multiple_camera_streams_image_reader_instance]
         val frameBufferCount = 3 // just an example, depends on your usage of ImageReader
         val imageReader = ImageReader.newInstance(
             imageReaderSize.width, imageReaderSize.height, ImageFormat.YUV_420_888,
             frameBufferCount
         )
-        // [END android_camera2_multiple_camera_streams_image_reader_instance]
+        // [END android_camera_camera2_multiple_camera_streams_image_reader_instance]
 
-        // [START android_camera2_multiple_camera_streams_image_reader_listener]
+        // [START android_camera_camera2_multiple_camera_streams_image_reader_listener]
         imageReader.setOnImageAvailableListener({
             val frame = it.acquireNextImage()
             // Do something with "frame" here
             it.close()
         }, null)
-        // [END android_camera2_multiple_camera_streams_image_reader_listener]
+        // [END android_camera_camera2_multiple_camera_streams_image_reader_listener]
     }
 }

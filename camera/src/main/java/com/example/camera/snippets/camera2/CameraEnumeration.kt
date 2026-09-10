@@ -27,7 +27,7 @@ private const val TAG = "CameraEnumeration"
 private object CameraEnumerationSnippets {
 
     fun iterateCameras(cameraManager: CameraManager) {
-        // [START android_camera2_camera_enumeration_iterate_cameras]
+        // [START android_camera_camera2_camera_enumeration_iterate_cameras]
         try {
             val cameraIdList = cameraManager.cameraIdList // may be empty
 
@@ -48,10 +48,10 @@ private object CameraEnumerationSnippets {
             e.message?.let { Log.e(TAG, it) }
             // ...
         }
-        // [END android_camera2_camera_enumeration_iterate_cameras]
+        // [END android_camera_camera2_camera_enumeration_iterate_cameras]
     }
 
-    // [START android_camera2_camera_enumeration_get_first_camera_id_facing]
+    // [START android_camera_camera2_camera_enumeration_get_first_camera_id_facing]
     fun getFirstCameraIdFacing(
         cameraManager: CameraManager,
         facing: Int = CameraMetadata.LENS_FACING_BACK
@@ -82,9 +82,9 @@ private object CameraEnumerationSnippets {
             return null
         }
     }
-    // [END android_camera2_camera_enumeration_get_first_camera_id_facing]
+    // [END android_camera_camera2_camera_enumeration_get_first_camera_id_facing]
 
-    // [START android_camera2_camera_enumeration_filter_cameras]
+    // [START android_camera_camera2_camera_enumeration_filter_cameras]
     fun filterCompatibleCameras(
         cameraIds: Array<String>,
         cameraManager: CameraManager
@@ -141,5 +141,5 @@ private object CameraEnumerationSnippets {
             allCameras.getOrNull((cameraIndex + 1) % allCameras.size)
         }
     }
-    // [END android_camera2_camera_enumeration_filter_cameras]
+    // [END android_camera_camera2_camera_enumeration_filter_cameras]
 }

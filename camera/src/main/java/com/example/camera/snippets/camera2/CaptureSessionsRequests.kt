@@ -40,7 +40,7 @@ private class CaptureSessionSetupActivity(
 ) : Activity() {
 
     fun prepareTargets() {
-        // [START android_camera2_capture_sessions_requests_configure_session]
+        // [START android_camera_camera2_capture_sessions_requests_configure_session]
         // Retrieve the target surfaces, which might be coming from a number of places:
         // 1. SurfaceView, if you want to display the image directly to the user
         // 2. ImageReader, if you want to read each frame or perform frame-by-frame
@@ -84,7 +84,7 @@ private class CaptureSessionSetupActivity(
             // ...
             device.createCaptureSession(session)
         }
-        // [END android_camera2_capture_sessions_requests_configure_session]
+        // [END android_camera_camera2_capture_sessions_requests_configure_session]
     }
 }
 
@@ -94,14 +94,14 @@ private object CaptureSessionsRequestsSnippets {
         sessionFromStateCallback: CameraCaptureSession,
         previewSurface: Surface
     ) {
-        // [START android_camera2_capture_sessions_requests_single_request]
+        // [START android_camera_camera2_capture_sessions_requests_single_request]
         val session: CameraCaptureSession = /* ... */ // from CameraCaptureSession.StateCallback
             // [START_EXCLUDE silent]
             sessionFromStateCallback
         // [END_EXCLUDE]
         val captureRequest = session.device.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
         captureRequest.addTarget(previewSurface)
-        // [END android_camera2_capture_sessions_requests_single_request]
+        // [END android_camera_camera2_capture_sessions_requests_single_request]
     }
 
     fun captureRequestSample(
@@ -109,7 +109,7 @@ private object CaptureSessionsRequestsSnippets {
         captureRequestBuilder: CaptureRequest.Builder
     ) {
         /*
-        // [START android_camera2_capture_sessions_requests_capture]
+        // [START android_camera_camera2_capture_sessions_requests_capture]
         val session: CameraCaptureSession = ...  // from CameraCaptureSession.StateCallback
         val captureRequest: CaptureRequest.Builder = ...  // from CameraDevice.createCaptureRequest()
         // [START_EXCLUDE silent]
@@ -124,7 +124,7 @@ private object CaptureSessionsRequestsSnippets {
         // corresponds to the Handler used by the asynchronous callback, which falls
         // back to the current thread's looper if null
         session.capture(captureRequest.build(), null, null)
-        // [END android_camera2_capture_sessions_requests_capture]
+        // [END android_camera_camera2_capture_sessions_requests_capture]
     }
 
     fun repeatingRequestSample(
@@ -132,7 +132,7 @@ private object CaptureSessionsRequestsSnippets {
         captureRequestBuilder: CaptureRequest.Builder
     ) {
         /*
-        // [START android_camera2_capture_sessions_requests_repeating_request]
+        // [START android_camera_camera2_capture_sessions_requests_repeating_request]
         val session: CameraCaptureSession = ... // from CameraCaptureSession.StateCallback
         val captureRequest: CaptureRequest.Builder = ... // from CameraDevice.createCaptureRequest()
         // [START_EXCLUDE silent]
@@ -144,7 +144,7 @@ private object CaptureSessionsRequestsSnippets {
         // This keeps sending the capture request as frequently as possible until
         // the session is torn down or session.stopRepeating() is called
         session.setRepeatingRequest(captureRequest.build(), null, null)
-        // [END android_camera2_capture_sessions_requests_repeating_request]
+        // [END android_camera_camera2_capture_sessions_requests_repeating_request]
     }
 
     fun interleavedRequestsSample(
@@ -152,7 +152,7 @@ private object CaptureSessionsRequestsSnippets {
         previewSurface: Surface,
         imReaderSurface: Surface
     ) {
-        // [START android_camera2_capture_sessions_requests_interleaved_requests]
+        // [START android_camera_camera2_capture_sessions_requests_interleaved_requests]
         val session: CameraCaptureSession = /* ... */ // from CameraCaptureSession.StateCallback
             // [START_EXCLUDE silent]
             sessionFromStateCallback
@@ -174,6 +174,6 @@ private object CaptureSessionsRequestsSnippets {
         )
         singleRequest.addTarget(imReaderSurface)
         session.capture(singleRequest.build(), null, null)
-        // [END android_camera2_capture_sessions_requests_interleaved_requests]
+        // [END android_camera_camera2_capture_sessions_requests_interleaved_requests]
     }
 }

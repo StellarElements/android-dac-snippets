@@ -35,7 +35,7 @@ import java.util.concurrent.Executor
 @RequiresApi(Build.VERSION_CODES.P)
 private object MultiCameraSnippets {
 
-    // [START android_camera2_multi_camera_find_dual_cameras]
+    // [START android_camera_camera2_multi_camera_find_dual_cameras]
     /**
      * Helper class used to encapsulate a logical camera and two underlying
      * physical cameras
@@ -75,10 +75,10 @@ private object MultiCameraSnippets {
 
         return dualCameras
     }
-    // [END android_camera2_multi_camera_find_dual_cameras]
+    // [END android_camera_camera2_multi_camera_find_dual_cameras]
 
     @RequiresPermission(Manifest.permission.CAMERA)
-    // [START android_camera2_multi_camera_open_dual_camera]
+    // [START android_camera_camera2_multi_camera_open_dual_camera]
     fun openDualCamera(
         cameraManager: CameraManager,
         dualCamera: DualCamera,
@@ -98,9 +98,9 @@ private object MultiCameraSnippets {
             }
         )
     }
-    // [END android_camera2_multi_camera_open_dual_camera]
+    // [END android_camera_camera2_multi_camera_open_dual_camera]
 
-    // [START android_camera2_multi_camera_create_dual_camera_session]
+    // [START android_camera_camera2_multi_camera_create_dual_camera_session]
     /**
      * Helper type definition that encapsulates 3 sets of output targets:
      *
@@ -157,9 +157,9 @@ private object MultiCameraSnippets {
             it.createCaptureSession(sessionConfiguration)
         }
     }
-    // [END android_camera2_multi_camera_create_dual_camera_session]
+    // [END android_camera_camera2_multi_camera_create_dual_camera_session]
 
-    // [START android_camera2_multi_camera_find_short_long_camera_pair]
+    // [START android_camera_camera2_multi_camera_find_short_long_camera_pair]
     fun findShortLongCameraPair(manager: CameraManager, facing: Int? = null): DualCamera? {
 
         return findDualCameras(manager, facing).map {
@@ -188,7 +188,7 @@ private object MultiCameraSnippets {
             // Return only the pair with the largest difference, or null if no pairs are found
         }.maxByOrNull { it.second }?.first
     }
-    // [END android_camera2_multi_camera_find_short_long_camera_pair]
+    // [END android_camera_camera2_multi_camera_find_short_long_camera_pair]
 
     @RequiresPermission(Manifest.permission.CAMERA)
     fun zoomExample(
@@ -196,7 +196,7 @@ private object MultiCameraSnippets {
         surface1: Surface,
         surface2: Surface
     ) {
-        // [START android_camera2_multi_camera_zoom_example]
+        // [START android_camera_camera2_multi_camera_zoom_example]
         // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
@@ -227,7 +227,7 @@ private object MultiCameraSnippets {
             // Set the sticky request for the session and you are done
             session.setRepeatingRequest(captureRequest, null, null)
         }
-        // [END android_camera2_multi_camera_zoom_example]
+        // [END android_camera_camera2_multi_camera_zoom_example]
     }
 
     fun distortionCorrection(
@@ -235,7 +235,7 @@ private object MultiCameraSnippets {
         characteristics: CameraCharacteristics,
         captureCallback: CameraCaptureSession.CaptureCallback? = null
     ) {
-        // [START android_camera2_multi_camera_distortion_correction]
+        // [START android_camera_camera2_multi_camera_distortion_correction]
         // [START_EXCLUDE silent]
         /*
         // [END_EXCLUDE]
@@ -281,6 +281,6 @@ private object MultiCameraSnippets {
         // [START_EXCLUDE silent]
          */
         // [END_EXCLUDE]
-        // [END android_camera2_multi_camera_distortion_correction]
+        // [END android_camera_camera2_multi_camera_distortion_correction]
     }
 }
