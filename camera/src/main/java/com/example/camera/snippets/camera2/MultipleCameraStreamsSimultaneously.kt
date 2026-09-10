@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.camera2.snippets
+package com.example.camera.snippets.camera2
 
 import android.app.Activity
 import android.content.Context
