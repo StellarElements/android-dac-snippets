@@ -22,10 +22,8 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -50,11 +48,9 @@ fun createDynamicShortcut(context: Context) {
     // [END android_shortcuts_create_dynamic]
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun Context.pinShortcut() {
-    val context = this
+fun pinShortcut(context: Context) {
     // [START android_shortcuts_pin_shortcut]
-    val shortcutManager = getSystemService<ShortcutManager>()
+    val shortcutManager = context.getSystemService<ShortcutManager>()
 
     if (shortcutManager!!.isRequestPinShortcutSupported) {
         // Enable the existing shortcut with the ID "my-shortcut".
