@@ -28,11 +28,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.camerax.snippets"
+    namespace = "com.example.camera.snippets"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.example.camerax.snippets"
+        applicationId = "com.example.camera.snippets"
         minSdk = 23
         targetSdk = 37
         versionCode = 1
@@ -68,6 +68,11 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.google.android.material)
+    implementation(libs.kotlinx.coroutines.android)
 
     // CameraX dependencies
     implementation(libs.androidx.camera.core)
