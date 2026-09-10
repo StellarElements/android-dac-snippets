@@ -35,16 +35,14 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.example.compose.snippets.R
 
-// [START android_receive_data_nav_deeplink]
 @Composable
 fun SharesheetNavHost() {
-    // [START_EXCLUDE silent]
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
         composable(route = "home") {
             // Home screen
         }
-        // [END_EXCLUDE]
+        // [START android_receive_data_nav_deeplink]
         composable(
             route = "incoming_share",
             deepLinks = listOf(
@@ -64,11 +62,9 @@ fun SharesheetNavHost() {
         ) {
             SharesheetHandler()
         }
-        // [START_EXCLUDE silent]
+        // [END android_receive_data_nav_deeplink]
     }
-    // [END_EXCLUDE]
 }
-// [END android_receive_data_nav_deeplink]
 
 // [START android_handle_intent_action_data_sent]
 @Composable
@@ -124,8 +120,7 @@ fun handleSendAndExtraText(intent: Intent) {
     IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java).let {
         // Handle the EXTRA_TEXT as well
         val extraText = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)
-        // Update ViewModel state to change state image being shared and the EXTRA_TEXT
-        // if available
+        // Update UI state with the shared image and the EXTRA_TEXT if available
     }
     // [END android_handle_intent_handle_extra_text]
 }
