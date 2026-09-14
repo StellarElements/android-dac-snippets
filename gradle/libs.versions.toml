@@ -22,13 +22,13 @@ androidx-credentials = "1.7.0-alpha03"
 androidx-credentials-play-services-auth = "1.7.0-alpha03"
 androidx-credentials-providerevents = "1.0.0-alpha06"
 androidx-emoji2-views = "1.6.0"
-androidx-fragment = "1.8.9"
+androidx-fragment = "1.9.0"
 androidx-glance-appwidget = "1.3.0-alpha02"
 androidx-lifecycle-compose = "2.11.0"
 androidx-lifecycle-runtime-compose = "2.11.0"
 androidx-lifecycle-viewmodel-navigation3 = "2.11.0"
 androidx-navigation = "2.9.8"
-androidx-navigation3 = "1.1.5"
+androidx-navigation3 = "1.2.0-beta01"
 androidx-paging = "3.5.0"
 androidx-startup-runtime = "1.2.0"
 androidx-test = "1.7.0"
@@ -284,6 +284,8 @@ androidx-window-core = { module = "androidx.window:window-core", version.ref = "
 androidx-window-java = { module = "androidx.window:window-java", version.ref = "androidx-window-java" }
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "androidx-work-runtime" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work-runtime" }
+androidx-work-rxjava2 = { module = "androidx.work:work-rxjava2", version.ref = "androidx-work-runtime" }
+androidx-work-testing = { module = "androidx.work:work-testing", version.ref = "androidx-work-runtime" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 billing = { module = "com.android.billingclient:billing-ktx", version.ref = "playbilling" }
 camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera-camera2" }
