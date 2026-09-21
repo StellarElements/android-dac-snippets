@@ -78,7 +78,7 @@ private object StabilityDiagnoseSnack {
 private object StabilityFixImmutableSet {
     // [START android_compose_performance_stability_snack_immutable_set]
     data class Snack(
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         val id: Long = 0L,
         val name: String = "",
         val imageUrl: String = "",
@@ -96,7 +96,7 @@ private object StabilityFixImmutableAnnotation {
     // [START android_compose_performance_stability_snack_immutable_annotation]
     @Immutable
     data class Snack(
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         val id: Long = 0L,
         val name: String = "",
         val imageUrl: String = "",
@@ -115,18 +115,20 @@ private object StabilityFixImmutableList {
     // [START android_compose_performance_stability_highlighted_snacks_immutable_list]
     @Composable
     private fun HighlightedSnacks(
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         index: Int = 0,
         // [END_EXCLUDE]
         // ...
         snacks: ImmutableList<Snack>,
         // ...
-        // [START_EXCLUDE]
+        // [START_EXCLUDE silent]
         onSnackClick: (Long) -> Unit = {},
         modifier: Modifier = Modifier
         // [END_EXCLUDE]
-    ) /* [START_EXCLUDE] */ { } /* [END_EXCLUDE] */
+    )
     // [END android_compose_performance_stability_highlighted_snacks_immutable_list]
+    {
+    }
 }
 
 private object StabilityFixSnackCollection {
@@ -152,8 +154,10 @@ private object StabilityFixHighlightedSnacksWrapper {
         snacks: SnackCollection,
         onSnackClick: (Long) -> Unit,
         modifier: Modifier = Modifier
-    ) /* [START_EXCLUDE] */ { } /* [END_EXCLUDE] */
+    )
     // [END android_compose_performance_stability_highlighted_snacks_wrapper]
+    {
+    }
 }
 
 private object StabilityStrongSkippingNonSkippable {
