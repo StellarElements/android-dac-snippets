@@ -83,7 +83,7 @@ private object M2M3ExperimentalSnippets {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun AppComposable() {
-        // M3 composables
+        //  composable with ExperimentalMaterial3Api
     }
     // [END android_compose_m2_m3_experimental_api]
 }
