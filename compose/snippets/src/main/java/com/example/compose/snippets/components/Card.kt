@@ -16,14 +16,12 @@
 
 package com.example.compose.snippets.components
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -34,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -47,38 +44,23 @@ fun CardExamples() {
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        CardMinimalExample()
         ElevatedCardExample()
         FilledCardExample()
         OutlinedCardExample()
-        CustomCardExample { Log.d("custom card", "hello word") }
     }
 }
 
-// [START android_compose_components_customcard]
+@Preview
+// [START android_compose_components_card_minimal]
 @Composable
-fun CustomCardExample(event: () -> Unit) {
-    Card(
-        border = BorderStroke(1.dp, Color.Black),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        ),
-        enabled = true,
-        modifier = Modifier.padding(16.dp),
-        onClick = event,
-        shape = RoundedCornerShape(8.dp),
-    ) {
-        Text(
-            text = "Custom card that uses the Card composable. Tap me to say hello world.",
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxSize()
-        )
+fun CardMinimalExample() {
+    Card {
+        Text(text = "Hello, world!")
     }
 }
-// [END android_compose_components_customcard]
+// [END android_compose_components_card_minimal]
+
 
 @Preview
 // [START android_compose_components_elevatedcard]
@@ -94,8 +76,7 @@ fun ElevatedCardExample() {
         Text(
             text = "Elevated",
             modifier = Modifier
-                .padding(16.dp),
-            textAlign = TextAlign.Center,
+                .padding(16.dp)
         )
     }
 }
@@ -115,8 +96,7 @@ fun FilledCardExample() {
         Text(
             text = "Filled",
             modifier = Modifier
-                .padding(16.dp),
-            textAlign = TextAlign.Center,
+                .padding(16.dp)
         )
     }
 }
@@ -138,7 +118,6 @@ fun OutlinedCardExample() {
             text = "Outlined",
             modifier = Modifier
                 .padding(16.dp),
-            textAlign = TextAlign.Center,
         )
     }
 }

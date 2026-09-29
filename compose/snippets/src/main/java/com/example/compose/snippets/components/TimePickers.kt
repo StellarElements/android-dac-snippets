@@ -126,44 +126,43 @@ fun TimePickerExamples() {
                     showDialExample = false
                     showMenu = true
                 },
-                onConfirm = {
-                    time ->
+                onConfirm = { time ->
                     selectedTime = time
                     showDialExample = false
                     showMenu = true
                 },
             )
+
             showInputExample -> InputUseStateExample(
                 onDismiss = {
                     showInputExample = false
                     showMenu = true
                 },
-                onConfirm = {
-                    time ->
+                onConfirm = { time ->
                     selectedTime = time
                     showInputExample = false
                     showMenu = true
                 },
             )
+
             showDialWithDialogExample -> DialWithDialogExample(
                 onDismiss = {
                     showDialWithDialogExample = false
                     showMenu = true
                 },
-                onConfirm = {
-                    time ->
+                onConfirm = { time ->
                     selectedTime = time
                     showDialWithDialogExample = false
                     showMenu = true
                 },
             )
+
             showAdvancedExample -> AdvancedTimePickerExample(
                 onDismiss = {
                     showAdvancedExample = false
                     showMenu = true
                 },
-                onConfirm = {
-                    time ->
+                onConfirm = { time ->
                     selectedTime = time
                     showAdvancedExample = false
                     showMenu = true
@@ -261,6 +260,41 @@ fun DialUseStateExample(
 // [END android_compose_components_dial_usestate]
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DialUseStateUsageExample() {
+    var showDialExample by remember { mutableStateOf(false) }
+    val formatter = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
+    // [START android_compose_components_dial_usestate_usage]
+    var selectedTime: TimePickerState? by remember { mutableStateOf(null) }
+
+    // [START_EXCLUDE]
+    // Trigger time picker or other UI
+    // [END_EXCLUDE]
+    DialUseStateExample(
+        onDismiss = {
+            showDialExample = false
+        },
+        onConfirm = { time ->
+            selectedTime = time
+            showDialExample = false
+        },
+    )
+
+    // [START_EXCLUDE]
+    // Display selected time
+    // [END_EXCLUDE]
+    selectedTime?.let { time ->
+        val cal = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, time.hour)
+            set(Calendar.MINUTE, time.minute)
+            isLenient = false
+        }
+        Text(text = "Selected time = ${formatter.format(cal.time)}")
+    } ?: Text(text = "No time selected.")
+    // [END android_compose_components_dial_usestate_usage]
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 // [START android_compose_components_input_usestate]
 @Composable
 fun InputUseStateExample(
@@ -305,7 +339,7 @@ fun DialWithDialogExample(
     )
 
     TimePickerDialog(
-        onDismiss = { onDismiss() },
+        onDismiss = onDismiss,
         onConfirm = { onConfirm(timePickerState) }
     ) {
         TimePicker(
@@ -323,13 +357,13 @@ fun TimePickerDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         dismissButton = {
-            TextButton(onClick = { onDismiss() }) {
-                Text("Dismiss")
+            TextButton(onClick = onDismiss) {
+                Text(text = "Dismiss")
             }
         },
         confirmButton = {
-            TextButton(onClick = { onConfirm() }) {
-                Text("OK")
+            TextButton(onClick = onConfirm) {
+                Text(text = "OK")
             }
         },
         text = { content() }
@@ -364,7 +398,7 @@ fun AdvancedTimePickerExample(
     }
 
     AdvancedTimePickerDialog(
-        onDismiss = { onDismiss() },
+        onDismiss = onDismiss,
         onConfirm = { onConfirm(timePickerState) },
         toggle = {
             IconButton(onClick = { showDial = !showDial }) {
@@ -403,13 +437,13 @@ fun AdvancedTimePickerDialog(
             shape = MaterialTheme.shapes.extraLarge,
             tonalElevation = 6.dp,
             modifier =
-            Modifier
-                .width(IntrinsicSize.Min)
-                .height(IntrinsicSize.Min)
-                .background(
-                    shape = MaterialTheme.shapes.extraLarge,
-                    color = MaterialTheme.colorScheme.surface
-                ),
+                Modifier
+                    .width(IntrinsicSize.Min)
+                    .height(IntrinsicSize.Min)
+                    .background(
+                        shape = MaterialTheme.shapes.extraLarge,
+                        color = MaterialTheme.colorScheme.surface
+                    ),
         ) {
             Column(
                 modifier = Modifier.padding(24.dp),
@@ -430,8 +464,12 @@ fun AdvancedTimePickerDialog(
                 ) {
                     toggle()
                     Spacer(modifier = Modifier.weight(1f))
-                    TextButton(onClick = onDismiss) { Text("Cancel") }
-                    TextButton(onClick = onConfirm) { Text("OK") }
+                    TextButton(onClick = onDismiss) {
+                        Text(text = "Cancel")
+                    }
+                    TextButton(onClick = onConfirm) {
+                        Text(text = "OK")
+                    }
                 }
             }
         }
