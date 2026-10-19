@@ -268,9 +268,7 @@ private fun DialUseStateUsageExample() {
     // [START android_compose_components_dial_usestate_usage]
     var selectedTime: TimePickerState? by remember { mutableStateOf(null) }
 
-    // [START_EXCLUDE]
     // Trigger time picker or other UI
-    // [END_EXCLUDE]
     DialUseStateExample(
         onDismiss = {
             showDialExample = false
@@ -282,17 +280,16 @@ private fun DialUseStateUsageExample() {
         },
     )
 
-    // [START_EXCLUDE]
     // Display selected time
-    // [END_EXCLUDE]
-    selectedTime?.let { time ->
-        val cal = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, time.hour)
-            set(Calendar.MINUTE, time.minute)
-            isLenient = false
-        }
+    if (selectedTime != null) {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY, selectedTime!!.hour)
+        cal.set(Calendar.MINUTE, selectedTime!!.minute)
+        cal.isLenient = false
         Text("Selected time = ${formatter.format(cal.time)}")
-    } ?: Text("No time selected.")
+    } else {
+        Text("No time selected.")
+    }
     // [END android_compose_components_dial_usestate_usage]
 }
 
@@ -359,12 +356,12 @@ fun TimePickerDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         dismissButton = {
-            TextButton(onClick = onDismiss ) {
+            TextButton(onClick = { onDismiss() }) {
                 Text("Dismiss")
             }
         },
         confirmButton = {
-            TextButton(onClick =  onConfirm ) {
+            TextButton(onClick = { onConfirm() }) {
                 Text("OK")
             }
         },
