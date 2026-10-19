@@ -21,6 +21,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,27 +48,38 @@ fun CardExamples() {
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        CardMinimalExample()
         ElevatedCardExample()
         FilledCardExample()
         OutlinedCardExample()
-        CustomCardExample { Log.d("custom card", "hello word") }
+        CustomCardExample { Log.d("custom card", "hello world") }
     }
 }
 
+@Preview
+// [START android_compose_components_card_minimal]
+@Composable
+fun CardMinimalExample() {
+    Card {
+        Text(text = "Hello, world!")
+    }
+}
+// [END android_compose_components_card_minimal]
+
 // [START android_compose_components_customcard]
 @Composable
-fun CustomCardExample(event: () -> Unit) {
+fun CustomCardExample(onCustomCardClick: () -> Unit) {
     Card(
-        border = BorderStroke(1.dp, Color.Black),
+        border = BorderStroke(1.dp,
+            MaterialTheme.colorScheme.outline),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
         ),
-        enabled = true,
         modifier = Modifier.padding(16.dp),
-        onClick = event,
+        onClick = onCustomCardClick,
         shape = RoundedCornerShape(8.dp),
     ) {
         Text(
@@ -94,7 +106,8 @@ fun ElevatedCardExample() {
         Text(
             text = "Elevated",
             modifier = Modifier
-                .padding(16.dp),
+                .padding(16.dp)
+                .fillMaxWidth(),
             textAlign = TextAlign.Center,
         )
     }
@@ -115,7 +128,9 @@ fun FilledCardExample() {
         Text(
             text = "Filled",
             modifier = Modifier
-                .padding(16.dp),
+                .padding(16.dp)
+                .fillMaxWidth()
+            ,
             textAlign = TextAlign.Center,
         )
     }
@@ -138,7 +153,6 @@ fun OutlinedCardExample() {
             text = "Outlined",
             modifier = Modifier
                 .padding(16.dp),
-            textAlign = TextAlign.Center,
         )
     }
 }
