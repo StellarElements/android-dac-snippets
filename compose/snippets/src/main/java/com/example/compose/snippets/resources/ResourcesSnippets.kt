@@ -36,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -45,7 +46,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.core.os.ConfigurationCompat
 import com.example.compose.snippets.R
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun Strings() {
@@ -180,3 +184,23 @@ fun CraneTheme(content: @Composable () -> Unit) {
     }
 }
 // [END android_compose_resources_fonts]
+
+@Composable
+private fun LocalizationSnippet() {
+    // [START android_resources_localization_local_configuration]
+    val locale = LocalConfiguration.current.locales[0]
+    // [END android_resources_localization_local_configuration]
+}
+
+// [START android_resources_runtime_changes_date_text]
+@Composable
+fun DateText(year: Int, dayOfYear: Int) {
+    val dateTimeFormatter = DateTimeFormatter.ofPattern(
+        "MMM dd",
+        ConfigurationCompat.getLocales(LocalConfiguration.current)[0]
+    )
+    Text(
+        dateTimeFormatter.format(LocalDate.ofYearDay(year, dayOfYear))
+    )
+}
+// [END android_resources_runtime_changes_date_text]

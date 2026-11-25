@@ -20,7 +20,12 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.fragment.app.FragmentActivity
+import com.example.cars.R
 
 fun isDeviceCredentialSet(context: Context) {
     // [START android_cars_parked_browser_device_credential]
@@ -36,4 +41,36 @@ fun openSecurityScreen(context: Context) {
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     )
     // [END android_cars_parked_browser_security_settings]
+}
+
+fun fullFlow(activity: FragmentActivity, context: Context) {
+    // [START android_cars_parked_browser_protect_sensitive_data]
+    val keyguardManager = context.getSystemService<KeyguardManager>()
+    val isDeviceSecure = keyguardManager?.isDeviceSecure == true
+
+    if (!isDeviceSecure) {
+        context.startActivity(
+            Intent(Settings.ACTION_SECURITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
+    } else {
+        val biometricPrompt = BiometricPrompt(
+            activity,
+            ContextCompat.getMainExecutor(context),
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(
+                    result: BiometricPrompt.AuthenticationResult
+                ) {
+                    super.onAuthenticationSucceeded(result)
+                    // Proceed with syncing or accessing sensitive data
+                }
+            }
+        )
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle(context.getString(R.string.auth_title))
+            .setSubtitle(context.getString(R.string.sync_data_to_car_notice))
+            .setAllowedAuthenticators(BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+            .build()
+        biometricPrompt.authenticate(promptInfo)
+    }
+    // [END android_cars_parked_browser_protect_sensitive_data]
 }
